@@ -3,6 +3,7 @@ package com.vertexcubed.ad_infinitum;
 import com.mojang.logging.LogUtils;
 import com.vertexcubed.ad_infinitum.common.registry.BlockRegistry;
 import com.vertexcubed.ad_infinitum.common.registry.TabRegistry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -12,6 +13,10 @@ import org.slf4j.Logger;
 public class AdInfinitum {
     public static final String MODID = "ad_infinitum";
     public static final Logger LOGGER = LogUtils.getLogger();
+
+    public static ResourceLocation modLoc(String id) {
+        return new ResourceLocation(MODID, id);
+    }
 
     public AdInfinitum() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

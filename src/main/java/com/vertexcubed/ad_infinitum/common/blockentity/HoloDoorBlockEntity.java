@@ -12,6 +12,7 @@ import earth.terrarium.adastra.common.blocks.base.MachineBlock;
 import earth.terrarium.adastra.common.constants.ConstantComponents;
 import earth.terrarium.botarium.common.energy.impl.InsertOnlyEnergyContainer;
 import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -130,6 +131,12 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
 //        data.setDirty();
 //
 //    }
+
+
+    @Override
+    public void clientTick(ClientLevel level, long time, BlockState state, BlockPos pos) {
+        super.clientTick(level, time, state, pos);
+    }
 
     //Calculations moved to tick event instead of on call to prevent having to calculate this every frame
     private void updateCorners() {

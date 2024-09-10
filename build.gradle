@@ -121,6 +121,11 @@ repositories {
         url = "https://maven.blamejared.com/"
     }
 
+    maven {
+        name 'Curios maven'
+        url = "https://maven.theillusivec4.top/"
+    }
+
     exclusiveContent {
         forRepository {
             maven {
@@ -150,11 +155,20 @@ dependencies {
     implementation fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-${minecraft_version}:${resourcefullib_version}")
     implementation fg.deobf("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-${minecraft_version}:${resourcefulconfig_version}")
 
+    //Lodestone
+    implementation fg.deobf("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}")
+    //Lodestone requires curios for some odd reason
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}:api")
+//    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}")
+
     //JEI
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     // at runtime, use the full JEI jar for Forge
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+
+    //Runtime Mods for testing
 
     //Jade
     runtimeOnly fg.deobf("maven.modrinth:jade:${jade_version}+forge")
