@@ -1,0 +1,10 @@
+{
+    "dimension": "ad_infinitum:unlandable",
+    "gravity": 9.807,
+    "orbit": "ad_infinitum:sun_orbit",
+    "oxygen": false,
+    "solar_power": 8192,
+    "solar_system": "ad_astra:solar_system",
+    "temperature": 1024,
+    "tier": 4
+}
