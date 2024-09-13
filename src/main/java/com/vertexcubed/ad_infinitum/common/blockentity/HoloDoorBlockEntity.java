@@ -24,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -141,9 +142,20 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
     //Calculations moved to tick event instead of on call to prevent having to calculate this every frame
     private void updateCorners() {
         Direction counter = this.getBlockState().getValue(MachineBlock.FACING).getCounterClockWise();
-        firstPos = this.getBlockPos().above().relative(counter, this.x_size - 1).above(this.y_size - 1);
+        firstPos = this.getBlockPos().above().relative(counter, this.x_size - 1);
         Direction clock = this.getBlockState().getValue(MachineBlock.FACING).getClockWise();
-        secondPos = this.getBlockPos().above().relative(clock, this.x_size - 1);
+        secondPos = this.getBlockPos().above().relative(clock, this.x_size - 1).above(this.y_size - 1);
+    }
+
+    public float getWidth() {
+        return this.x_size * 2.0f - 1.0f;
+    }
+
+    public float getHeight() {
+        return this.y_size;
+    }
+    public float getDepth() {
+        return 1.0f;
     }
 
     public BlockPos getFirstPos() {
@@ -219,5 +231,10 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
     @Override
     public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
         return null;
+    }
+
+    @Override
+    public AABB getRenderBoundingBox() {
+        return new AABB(firstPos.below(), secondPos.above());
     }
 }

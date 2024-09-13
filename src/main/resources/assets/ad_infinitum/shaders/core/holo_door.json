@@ -1,23 +1,38 @@
 {
     "blend": {
         "func": "add",
-        "srcrgb": "one",
-        "dstrgb": "zero"
+        "srcrgb": "srcalpha",
+        "dstrgb": "1-srcalpha"
     },
-    "vertex": "position_tex_color",
-    "fragment": "position_tex_color",
+    "vertex": "ad_infinitum:holo_door",
+    "fragment": "ad_infinitum:holo_door",
     "attributes": [
         "Position",
+        "Color",
         "UV0",
-        "Color"
+        "UV2"
     ],
     "samplers": [
-        { "name": "Sampler0" }
+        { "name": "Sampler0" },
+        { "name": "Sampler2" },
+        { "name": "SceneDepthBuffer" }
     ],
     "uniforms": [
         { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
         { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
-        { "name": "ColorModulator", "type": "float", "count": 4, "values": [ 1.0, 1.0, 1.0, 1.0 ] }
+        { "name": "IViewRotMat", "type": "matrix3x3", "count": 9, "values": [ 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "ColorModulator", "type": "float", "count": 4, "values": [ 1.0, 1.0, 1.0, 1.0 ] },
+        { "name": "FogStart", "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "FogEnd", "type": "float", "count": 1, "values": [ 1.0 ] },
+        { "name": "FogColor", "type": "float", "count": 4, "values": [ 0.0, 0.0, 0.0, 0.0 ] },
+        { "name": "FogShape", "type": "int", "count": 1, "values": [ 0 ] },
+        { "name": "LumiTransparency", "type": "float", "count": 1, "values": [ 0.0 ] },
 
+        { "name": "InvProjMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "ScreenSize", "type": "float", "count": 2, "values": [1.0, 1.0] },
+        { "name": "nearPlaneDistance", "type": "float", "count": 1, "values": [ 1.0 ] },
+        { "name": "farPlaneDistance", "type": "float", "count": 1, "values": [ 100.0 ] },
+        { "name": "Time", "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "DistortionVector", "type": "float", "count": 3, "values": [ 0.0, 0.0, 0.0 ] }
     ]
 }

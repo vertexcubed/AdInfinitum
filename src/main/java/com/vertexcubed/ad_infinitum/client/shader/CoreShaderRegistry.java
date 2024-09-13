@@ -17,7 +17,7 @@ public class CoreShaderRegistry {
     public static final List<ShaderHolder> SHADERS = new ArrayList<>();
 
     public static ShaderHolder
-            HOLO_DOOR = register(modLoc("holo_door"), DefaultVertexFormat.POSITION_TEX_COLOR);
+            HOLO_DOOR = register(modLoc("holo_door"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, "nearPlaneDistance", "farPlaneDistance");
 
 
 
