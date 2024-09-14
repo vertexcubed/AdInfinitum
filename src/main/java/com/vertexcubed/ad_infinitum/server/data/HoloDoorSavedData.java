@@ -19,7 +19,7 @@ public class HoloDoorSavedData extends SavedData {
 
     public HoloDoorSavedData(CompoundTag tag) {
         holoDoors = new HashMap<>();
-        ListTag list = tag.getList(DATA_ID, ListTag.TAG_COMPOUND);
+        ListTag list = tag.getList("blocks", ListTag.TAG_COMPOUND);
         list.forEach(entry -> {
             holoDoors.put(((CompoundTag) entry).getUUID("key"), BlockPos.of(((CompoundTag) entry).getLong("value")));
         });
