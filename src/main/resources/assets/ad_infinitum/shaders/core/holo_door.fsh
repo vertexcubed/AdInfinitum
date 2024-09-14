@@ -20,6 +20,7 @@ uniform float farPlaneDistance;
 in float vertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
+in vec4 normal;
 
 out vec4 fragColor;
 
@@ -47,7 +48,7 @@ float sdBox(vec2 p, vec2 b) {
 void main() {
     vec2 uv = texCoord0;
 //    vec4 texColor = texture(Sampler0, uv);
-    vec4 texColor = vec4(0.0375);
+    vec4 texColor = vec4(0.0125);
     vec4 edgeColor = vec4(0.5);
 //    vec4 edgeColor = vec4(1);
 

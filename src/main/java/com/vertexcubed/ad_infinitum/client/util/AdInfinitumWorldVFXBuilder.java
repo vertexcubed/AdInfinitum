@@ -1,8 +1,10 @@
 package com.vertexcubed.ad_infinitum.client.util;
 
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.util.Maath;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -13,8 +15,35 @@ import java.util.Arrays;
 
 public class AdInfinitumWorldVFXBuilder extends VFXBuilders.WorldVFXBuilder {
 
-    public AdInfinitumWorldVFXBuilder() {}
+    private Vector3f normal;
 
+    private AdInfinitumWorldVFXBuilder() {}
+
+    static {
+        VFXBuilders.WorldVFXBuilder.CONSUMER_INFO_MAP.put(DefaultVertexFormat.ELEMENT_NORMAL, (consumer, last, builder, x, y, z, u, v) -> {
+            consumer.normal(AdInfinitumWorldVFXBuilder.getNormal(builder).x(), AdInfinitumWorldVFXBuilder.getNormal(builder).y(), AdInfinitumWorldVFXBuilder.getNormal(builder).z());
+        });
+        VFXBuilders.WorldVFXBuilder.CONSUMER_INFO_MAP.put(DefaultVertexFormat.ELEMENT_PADDING, (consumer, last, builder, x, y, z, u, v) -> {
+            return;
+        });
+    }
+
+    public AdInfinitumWorldVFXBuilder setNormal(Vector3f normal) {
+        this.normal = normal;
+        return this;
+    }
+    public AdInfinitumWorldVFXBuilder setNormal(Vec3i normal) {
+        return setNormal(new Vector3f((float) normal.getX(), (float) normal.getY(), (float) normal.getZ()));
+    }
+
+    public static Vector3f getNormal(VFXBuilders.WorldVFXBuilder builder) {
+        if(builder instanceof AdInfinitumWorldVFXBuilder adInfBuilder) {
+            return adInfBuilder.normal;
+        }
+        else {
+            return new Vector3f(0, 0, 0);
+        }
+    }
 
     public static AdInfinitumWorldVFXBuilder createWorld() {
         return new AdInfinitumWorldVFXBuilder();

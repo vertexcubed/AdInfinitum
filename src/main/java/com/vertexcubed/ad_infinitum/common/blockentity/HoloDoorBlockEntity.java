@@ -1,8 +1,10 @@
 package com.vertexcubed.ad_infinitum.common.blockentity;
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
+import com.vertexcubed.ad_infinitum.common.menu.HoloDoorMenu;
 import com.vertexcubed.ad_infinitum.server.data.ChunkProtectedBlocks;
 import com.vertexcubed.ad_infinitum.server.data.HoloDoorSavedData;
+import com.vertexcubed.ad_infinitum.server.network.ServerboundUpdateHoloDoorSizePacket;
 import earth.terrarium.adastra.common.blockentities.base.EnergyContainerMachineBlockEntity;
 import earth.terrarium.adastra.common.blockentities.base.RedstoneControl;
 import earth.terrarium.adastra.common.blockentities.base.sideconfig.Configuration;
@@ -35,7 +37,9 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
     public static final List<ConfigurationEntry> SIDE_CONFIG = List.of(
             new ConfigurationEntry(ConfigurationType.ENERGY, Configuration.NONE, ConstantComponents.SIDE_CONFIG_ENERGY)
     );
-    public static final RedstoneControl REDSTONE = RedstoneControl.ON_WHEN_NOT_POWERED;
+
+    public static final int MAX_X = 4;
+    public static final int MAX_Y = 7;
 
     public static final int CONTAINER_SIZE = 1;
     public static final String DATA_X_SIZE_KEY = "x_size";
@@ -71,9 +75,17 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
         HoloDoorSavedData data = HoloDoorSavedData.getOrLoad(level);
         if(!this.canFunction() || energyStorage.internalExtract(usedEnergy, true) < usedEnergy) {
             data.remove(this.uuid);
+            if(visible) {
+                visible = false;
+                setChanged();
+            }
             return;
         }
         energyStorage.internalExtract(usedEnergy, false);
+        if(!visible) {
+            visible = true;
+            setChanged();
+        }
         if(!data.containsKey(uuid)) {
             data.add(this.uuid, this.getBlockPos());
         }
@@ -147,6 +159,41 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
         secondPos = this.getBlockPos().above().relative(clock, this.x_size - 1).above(this.y_size - 1);
     }
 
+    public void changeSize(ServerboundUpdateHoloDoorSizePacket.OpCode opcode) {
+        switch(opcode) {
+            case INCREASE_X -> this.increaseXSize();
+            case DECREASE_X -> this.decreaseXSize();
+            case INCREASE_Y -> this.increaseYSize();
+            case DECREASE_Y -> this.decreaseYSize();
+            default -> throw new IllegalStateException("Unexpected opcode: " + opcode);
+        }
+    }
+
+    public void increaseXSize() {
+        if(this.x_size < MAX_X) {
+            this.x_size++;
+            setChanged();
+        }
+    }
+    public void decreaseXSize() {
+        if(this.x_size > 1) {
+            this.x_size--;
+            setChanged();
+        }
+    }
+    public void increaseYSize() {
+        if(this.y_size < MAX_Y) {
+            this.y_size++;
+            setChanged();
+        }
+    }
+    public void decreaseYSize() {
+        if(this.y_size > 1) {
+            this.y_size--;
+            setChanged();
+        }
+    }
+
     public float getWidth() {
         return this.x_size * 2.0f - 1.0f;
     }
@@ -163,6 +210,10 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
     }
     public BlockPos getSecondPos() {
         return secondPos;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 
     /**
@@ -204,11 +255,6 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
     }
 
     @Override
-    public RedstoneControl getRedstoneControl() {
-        return REDSTONE;
-    }
-
-    @Override
     public List<ConfigurationEntry> getDefaultConfig() {
         return SIDE_CONFIG;
     }
@@ -230,11 +276,11 @@ public class HoloDoorBlockEntity extends EnergyContainerMachineBlockEntity {
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-        return null;
+        return new HoloDoorMenu(i, inventory, this);
     }
 
     @Override
     public AABB getRenderBoundingBox() {
-        return new AABB(firstPos.below(), secondPos.above());
+        return new AABB(firstPos.offset(-1, -1, -1), secondPos.offset(1, 1, 1));
     }
 }

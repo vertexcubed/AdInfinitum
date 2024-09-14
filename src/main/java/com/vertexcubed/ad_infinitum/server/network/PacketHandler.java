@@ -11,5 +11,6 @@ public class PacketHandler {
 
     public static void init() {
         CHANNEL.register(ClientboundSyncUnlandablePlanetsPacket.TYPE);
+        CHANNEL.register(ServerboundUpdateHoloDoorSizePacket.TYPE);
     }
 }

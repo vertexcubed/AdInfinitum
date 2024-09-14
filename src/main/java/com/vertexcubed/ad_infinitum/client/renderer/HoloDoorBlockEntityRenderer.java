@@ -9,6 +9,7 @@ import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.client.shader.CoreShaderRegistry;
 import com.vertexcubed.ad_infinitum.client.util.AdInfinitumWorldVFXBuilder;
 import com.vertexcubed.ad_infinitum.client.util.ModStateShards;
+import com.vertexcubed.ad_infinitum.client.util.ModVertexFormats;
 import com.vertexcubed.ad_infinitum.common.block.HoloDoorBlock;
 import com.vertexcubed.ad_infinitum.common.blockentity.HoloDoorBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -23,13 +24,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
 import team.lodestar.lodestone.handlers.RenderHandler;
 import team.lodestar.lodestone.registry.client.LodestoneRenderTypeRegistry;
+import team.lodestar.lodestone.registry.client.LodestoneShaderRegistry;
 import team.lodestar.lodestone.systems.rendering.LodestoneRenderType;
 import team.lodestar.lodestone.systems.rendering.StateShards;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
 import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeProvider;
 import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeToken;
 
+import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP;
+import static com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS;
 import static com.vertexcubed.ad_infinitum.AdInfinitum.modLoc;
+import static team.lodestar.lodestone.registry.client.LodestoneRenderTypeRegistry.createGenericRenderType;
 
 public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoorBlockEntity> {
 
@@ -39,11 +44,16 @@ public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoor
 
     public static final ResourceLocation RENDER_TYPE = new ResourceLocation(AdInfinitum.MODID, "holo_door");
 
-    public static final LodestoneRenderType HOLO_DOOR = LodestoneRenderTypeRegistry.ADDITIVE_TEXTURE.applyWithModifier(RenderTypeToken.createToken(TEXTURE), builder -> builder
-            .setCullState(LodestoneRenderTypeRegistry.NO_CULL)
-            .setShaderState(CoreShaderRegistry.HOLO_DOOR)
-            .setWriteMaskState(ModStateShards.COLOR_WRITE)
-    );
+    public static final RenderTypeProvider HOLO_DOOR_PROVIDER = new RenderTypeProvider((token) ->
+            createGenericRenderType("holo_door", ModVertexFormats.POSITION_COLOR_TEX_LIGHTMAP_NORMAL, QUADS, LodestoneRenderTypeRegistry.builder()
+                    .setShaderState(CoreShaderRegistry.HOLO_DOOR)
+                    .setTransparencyState(StateShards.ADDITIVE_TRANSPARENCY)
+                    .setLightmapState(LodestoneRenderTypeRegistry.LIGHTMAP)
+                    .setCullState(LodestoneRenderTypeRegistry.NO_CULL)
+                    .setWriteMaskState(ModStateShards.COLOR_WRITE)
+                    .setTextureState(token.get())));
+
+    public static final LodestoneRenderType HOLO_DOOR = HOLO_DOOR_PROVIDER.apply(RenderTypeToken.createToken(TEXTURE));
 
     public static final LodestoneRenderType TEST = LodestoneRenderTypeRegistry.TRANSPARENT_TEXTURE.apply(RenderTypeToken.createToken(TEXTURE));
 
@@ -57,6 +67,10 @@ public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoor
 //        AdInfinitum.LOGGER.info("Rendering!!!");
 
         //absolute pain
+
+        if(!pBlockEntity.isVisible()) {
+            return;
+        }
 
         poseStack.pushPose();
 //        poseStack.translate(pBlockEntity.getBlockPos().getX(), pBlockEntity.getBlockPos().getY() + 3, pBlockEntity.getBlockPos().getZ());
@@ -83,16 +97,15 @@ public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoor
         LodestoneRenderTypeRegistry.applyUniformChanges(HOLO_DOOR, instance -> {
             instance.safeGetUniform("nearPlaneDistance").set(GameRenderer.PROJECTION_Z_NEAR);
             instance.safeGetUniform("farPlaneDistance").set(Minecraft.getInstance().gameRenderer.getDepthFar());
-            instance.safeGetUniform("DistortionVector").set((float) direction.getNormal().getX(), (float) direction.getNormal().getY(), (float) direction.getNormal().getZ());
             instance.safeGetUniform("Time").set(Minecraft.getInstance().level.getGameTime() + pPartialTick);
 //            AdInfinitum.LOGGER.info("Applying uniforms");
         });
-        renderRectangularPrism(poseStack, pBuffer, width, height, depth);
+        renderRectangularPrism(poseStack, pBuffer, direction, width, height, depth);
         poseStack.popPose();
     }
 
 
-    private void renderRectangularPrism(PoseStack poseStack, MultiBufferSource buffer, float width, float height, float depth) {
+    private void renderRectangularPrism(PoseStack poseStack, MultiBufferSource buffer, Direction direction, float width, float height, float depth) {
 
         //Just testing stuff at this point cuz this shit wont work
 
@@ -144,26 +157,28 @@ public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoor
         RenderHandler.copyDepthBuffer(RenderHandler.LODESTONE_DEPTH_CACHE);
 
 //        AdInfinitum.LOGGER.info("Rendering");
-        builder
-                .setRenderType(HOLO_DOOR)
-                .renderQuad(poseStack, front, 1)
-                .renderQuad(poseStack, back, 1)
-                .renderQuad(poseStack, left, 1)
-                .renderQuad(poseStack, right, 1);
-        builder
-                .setUV(0.0f, 0.0f, 0.125f, 0.125f)
-                .renderQuad(poseStack, top, 1)
-                .renderQuad(poseStack, bottom, 1)
-
-//        ((AdInfinitumWorldVFXBuilder) builder)
-////                .renderTriangle(poseStack, test)
-//                .renderQuadMesh(poseStack, front, 20, 20)
-//                .renderQuadMesh(poseStack, back, 20, 20)
-//                .renderQuadMesh(poseStack, left, 20, 20)
-//                .renderQuadMesh(poseStack, right, 20, 20)
-//                .renderQuadMesh(poseStack, top, 20, 20)
-//                .renderQuadMesh(poseStack, bottom, 20, 20)
+//        builder
 //                .renderQuad(poseStack, front, 1)
+//                .renderQuad(poseStack, back, 1)
+//                .renderQuad(poseStack, left, 1)
+//                .renderQuad(poseStack, right, 1);
+//        builder
+//                .setUV(0.0f, 0.0f, 0.125f, 0.125f)
+//                .renderQuad(poseStack, top, 1)
+//                .renderQuad(poseStack, bottom, 1)
+
+//        AdInfinitum.LOGGER.info("Normal: " + direction.getNormal());
+        int xSubdivisions = 40;
+        int ySubdivisions = 40;
+        ((AdInfinitumWorldVFXBuilder) builder)
+                .setNormal(new Vector3f(1, 0, 0))
+                .renderQuadMesh(poseStack, front, xSubdivisions, ySubdivisions)
+                .renderQuadMesh(poseStack, back, xSubdivisions, ySubdivisions)
+                .setNormal(new Vector3f(0, 0, 0))
+                .renderQuadMesh(poseStack, left, xSubdivisions, ySubdivisions)
+                .renderQuadMesh(poseStack, right, xSubdivisions, ySubdivisions)
+                .renderQuadMesh(poseStack, top, xSubdivisions, ySubdivisions)
+                .renderQuadMesh(poseStack, bottom, xSubdivisions, ySubdivisions)
         ;
 
         ;
