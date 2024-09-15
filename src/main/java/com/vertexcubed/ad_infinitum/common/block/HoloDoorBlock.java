@@ -19,5 +19,4 @@ public class HoloDoorBlock extends MachineBlock {
     public BlockEntityType<?> entity(BlockState state) {
         return BlockRegistry.HOLO_DOOR_BLOCK_ENTITY.get();
     }
-
 }

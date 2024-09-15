@@ -7,8 +7,13 @@ import net.minecraft.util.Mth;
  * An energy container that can only be inserted/extracted from internally. Mainly for use in multiblocks
  */
 public class InternalOnlyEnergyContainer extends SimpleEnergyContainer {
-    public InternalOnlyEnergyContainer(long maxCapacity) {
+
+    public InternalOnlyEnergyContainer(int maxCapacity) {
         super(maxCapacity);
+    }
+
+    public InternalOnlyEnergyContainer(long maxCapacity, long maxTransfer) {
+        super(maxCapacity, maxTransfer, maxTransfer);
     }
 
     @Override

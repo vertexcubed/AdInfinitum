@@ -1,21 +1,28 @@
 package com.vertexcubed.ad_infinitum.common.multiblock.data;
 
 import com.mojang.serialization.Codec;
+import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
+import com.vertexcubed.ad_infinitum.common.multiblock.matcher.StateMatcher;
 import com.vertexcubed.ad_infinitum.common.registry.MultiblockDataRegistry;
 import net.minecraft.util.ExtraCodecs;
 
 
-public interface MultiblockData {
+public abstract class MultiblockData {
+
+    public static final Codec<MultiblockData> CODEC = ExtraCodecs.lazyInitializedCodec(() -> MultiblockDataRegistry.MULTIBLOCK_DATA_REGISTRY.get().getCodec()).dispatch(MultiblockData::getType, MultiblockData.Type::codec);
+
+    protected Multiblock multiblock;
+
+    public void init(Multiblock multiblock) {
+        this.multiblock = multiblock;
+    }
+    public abstract void setupData(int x, int y, int z, String key);
+
+    public abstract MultiblockData.Type<?> getType();
 
 
-    Codec<MultiblockData> CODEC = ExtraCodecs.lazyInitializedCodec(() -> MultiblockDataRegistry.MULTIBLOCK_DATA_REGISTRY.get().getCodec()).dispatch(MultiblockData::getType, MultiblockData.Type::codec);
-
-    MultiblockData.Type<?> getType();
 
 
 
-
-
-
-    record Type<S extends MultiblockData>(Codec<S> codec) {}
+    public record Type<S extends MultiblockData>(Codec<S> codec) {}
 }

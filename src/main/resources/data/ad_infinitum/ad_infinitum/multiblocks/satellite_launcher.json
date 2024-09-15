@@ -1,8 +1,8 @@
 {
     "pattern": [
         [
-            "     ",
-            " IGI ",
+            "  E  ",
+            " SGI ",
             " GIG ",
             " IGI ",
             "     "
@@ -16,6 +16,10 @@
         ]
     ],
     "mappings": {
+        "E": {
+            "type": "ad_infinitum:block",
+            "block": "mekanism:basic_energy_cube"
+        },
         "I": {
             "type": "ad_infinitum:block",
             "block": "minecraft:iron_block"
@@ -24,9 +28,17 @@
             "type": "ad_infinitum:block",
             "block": "minecraft:gold_block"
         },
+        "S": {
+            "type": "ad_infinitum:block",
+            "block": "minecraft:stone"
+        },
         "0": {
             "type": "ad_infinitum:block",
             "block": "ad_infinitum:satellite_launcher"
         }
+    },
+    "data": {
+        "type": "ad_infinitum:generic_machine",
+        "energyIn": "E"
     }
 }

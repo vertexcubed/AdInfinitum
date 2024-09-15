@@ -58,6 +58,7 @@ public class AdInfinitum {
         modEventBus.addListener(BlockRegistry::registerBlockItems);
 
         StateMatcherRegistry.register(modEventBus);
+        MultiblockDataRegistry.register(modEventBus);
         TabRegistry.register(modEventBus);
         MenuRegistry.register(modEventBus);
         SatelliteRegistry.register(modEventBus);
