@@ -1,0 +1,32 @@
+{
+    "pattern": [
+        [
+            "     ",
+            " IGI ",
+            " GIG ",
+            " IGI ",
+            "     "
+        ],
+        [
+            "     ",
+            "     ",
+            "  0  ",
+            "     ",
+            "     "
+        ]
+    ],
+    "mappings": {
+        "I": {
+            "type": "ad_infinitum:block",
+            "block": "minecraft:iron_block"
+        },
+        "G": {
+            "type": "ad_infinitum:block",
+            "block": "minecraft:gold_block"
+        },
+        "0": {
+            "type": "ad_infinitum:block",
+            "block": "ad_infinitum:satellite_launcher"
+        }
+    }
+}

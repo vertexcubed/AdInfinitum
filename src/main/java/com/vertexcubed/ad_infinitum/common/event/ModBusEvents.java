@@ -4,6 +4,7 @@ import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.client.renderer.HoloDoorBlockEntityRenderer;
 import com.vertexcubed.ad_infinitum.client.screen.HoloDoorScreen;
 import com.vertexcubed.ad_infinitum.client.shader.CoreShaderRegistry;
+import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
 import com.vertexcubed.ad_infinitum.common.registry.BlockRegistry;
 import com.vertexcubed.ad_infinitum.common.registry.MenuRegistry;
 import com.vertexcubed.ad_infinitum.server.data.ChunkProtectedBlocks;
@@ -19,6 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import java.io.IOException;
 
@@ -48,5 +50,10 @@ public class ModBusEvents {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         MenuScreens.register(MenuRegistry.HOLO_DOOR.get(), HoloDoorScreen::new);
+    }
+
+    @SubscribeEvent
+    public static void datapackRegistries(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(Multiblock.REGISTRY, Multiblock.CODEC, Multiblock.CODEC);
     }
 }

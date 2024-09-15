@@ -7,8 +7,7 @@
         "DebuggingSpaceStation",
         "FloodFill3DMixin",
         "PlanetsMenuMixin",
-        "ServerLevelMixin",
-        "WorldVFXBuildersMixin"
+        "ServerLevelMixin"
     ],
     "injectors": {
         "defaultRequire": 1

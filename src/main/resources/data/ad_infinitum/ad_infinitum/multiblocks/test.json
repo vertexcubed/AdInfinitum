@@ -1,0 +1,25 @@
+{
+    "pattern": [
+        [
+            "     ",
+            " IGI ",
+            " G0G ",
+            " IGI ",
+            "     "
+        ]
+    ],
+    "mappings": {
+        "I": {
+            "type": "ad_infinitum:block",
+            "block": "minecraft:iron_block"
+        },
+        "G": {
+            "type": "ad_infinitum:block",
+            "block": "minecraft:gold_block"
+        },
+        "0": {
+            "type": "ad_infinitum:block",
+            "block": "minecraft:diamond_block"
+        }
+    }
+}

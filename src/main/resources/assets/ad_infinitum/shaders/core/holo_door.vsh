@@ -41,7 +41,7 @@ void main() {
     noise.noise_type = FNL_NOISE_PERLIN;
 
     vec2 noiseCoord = texCoord0 * vec2(400.0, 400.0);
-    float noiseValue = fnlGetNoise3D(noise, noiseCoord.x, Time, noiseCoord.y) * 0.675;
+    float noiseValue = fnlGetNoise3D(noise, noiseCoord.x, Time, noiseCoord.y) * 0.5;
     float circle = 1. - smoothstep(0.0, 0.125, clamp(0.0, 1.0, sdCircle(texCoord0 - 0.5, 0.375)));
     noiseValue *= circle;
     vec3 pos = Position + (normal.xyz * noiseValue);

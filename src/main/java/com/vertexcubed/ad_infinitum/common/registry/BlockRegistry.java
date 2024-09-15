@@ -2,7 +2,9 @@ package com.vertexcubed.ad_infinitum.common.registry;
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.block.HoloDoorBlock;
+import com.vertexcubed.ad_infinitum.common.block.SatelliteLauncherBlock;
 import com.vertexcubed.ad_infinitum.common.blockentity.HoloDoorBlockEntity;
+import com.vertexcubed.ad_infinitum.common.blockentity.SatelliteLauncherBlockEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -29,9 +31,17 @@ public class BlockRegistry {
             ))
     ;
 
-    public static final RegistryObject<BlockEntityType<HoloDoorBlockEntity>> HOLO_DOOR_BLOCK_ENTITY =
-            BLOCK_ENTITY_TYPES.register("holo_door_block_entity", () -> BlockEntityType.Builder.of(HoloDoorBlockEntity::new, HOLO_DOOR_BLOCK.get()).build(null));
+    public static final RegistryObject<Block> SATELLITE_LAUNCHER_BLOCK = BLOCKS.register("satellite_launcher", () -> new SatelliteLauncherBlock(
+            BlockBehaviour.Properties.of()
+                    .strength(3.0f)
+            ))
+    ;
 
+
+    public static final RegistryObject<BlockEntityType<HoloDoorBlockEntity>> HOLO_DOOR_BLOCK_ENTITY =
+            BLOCK_ENTITY_TYPES.register("holo_door", () -> BlockEntityType.Builder.of(HoloDoorBlockEntity::new, HOLO_DOOR_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<SatelliteLauncherBlockEntity>> SATELLITE_LAUNCHER_BLOCK_ENTITY =
+            BLOCK_ENTITY_TYPES.register("satellite_launcher", () -> BlockEntityType.Builder.of(SatelliteLauncherBlockEntity::new, SATELLITE_LAUNCHER_BLOCK.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);

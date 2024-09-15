@@ -51,7 +51,9 @@ public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoor
                     .setLightmapState(LodestoneRenderTypeRegistry.LIGHTMAP)
                     .setCullState(LodestoneRenderTypeRegistry.NO_CULL)
                     .setWriteMaskState(ModStateShards.COLOR_WRITE)
-                    .setTextureState(token.get())));
+                    .setTextureState(token.get())
+            )
+    );
 
     public static final LodestoneRenderType HOLO_DOOR = HOLO_DOOR_PROVIDER.apply(RenderTypeToken.createToken(TEXTURE));
 
@@ -154,7 +156,7 @@ public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoor
                 new Vector3f(0, 0, depth),
         };
 
-        RenderHandler.copyDepthBuffer(RenderHandler.LODESTONE_DEPTH_CACHE);
+//        RenderHandler.copyDepthBuffer(RenderHandler.LODESTONE_DEPTH_CACHE);
 
 //        AdInfinitum.LOGGER.info("Rendering");
 //        builder

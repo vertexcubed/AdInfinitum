@@ -3,10 +3,7 @@ package com.vertexcubed.ad_infinitum;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.logging.LogUtils;
 import com.vertexcubed.ad_infinitum.client.util.AdInfinitumWorldVFXBuilder;
-import com.vertexcubed.ad_infinitum.common.registry.BlockRegistry;
-import com.vertexcubed.ad_infinitum.common.registry.MenuRegistry;
-import com.vertexcubed.ad_infinitum.common.registry.SatelliteRegistry;
-import com.vertexcubed.ad_infinitum.common.registry.TabRegistry;
+import com.vertexcubed.ad_infinitum.common.registry.*;
 import earth.terrarium.adastra.api.planets.PlanetApi;
 import earth.terrarium.adastra.common.network.messages.ServerboundConstructSpaceStationPacket;
 import earth.terrarium.adastra.common.utils.ModUtils;
@@ -57,8 +54,10 @@ public class AdInfinitum {
 //        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         BlockRegistry.register(modEventBus);
+        ItemRegistry.register(modEventBus);
         modEventBus.addListener(BlockRegistry::registerBlockItems);
 
+        StateMatcherRegistry.register(modEventBus);
         TabRegistry.register(modEventBus);
         MenuRegistry.register(modEventBus);
         SatelliteRegistry.register(modEventBus);

@@ -18,7 +18,7 @@ public class TabRegistry {
                     .title(Component.translatable("itemGroup." + AdInfinitum.MODID))
                     .icon(() -> new ItemStack(Items.BARRIER))
                     .displayItems((parameters, output) -> {
-//                        ItemRegistry.ITEMS.getEntries().forEach(item -> output.accept(item.get()));
+                        ItemRegistry.ITEMS.getEntries().forEach(item -> output.accept(item.get()));
 //                        FluidRegistry.FLUIDS.getEntries().forEach(fluid -> output.accept(fluid.bucket()));
                         BlockRegistry.BLOCKS.getEntries().forEach(block -> output.accept(block.get().asItem()));
 
