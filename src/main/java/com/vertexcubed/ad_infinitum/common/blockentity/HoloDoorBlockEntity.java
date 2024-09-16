@@ -1,12 +1,10 @@
 package com.vertexcubed.ad_infinitum.common.blockentity;
 
-import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.menu.HoloDoorMenu;
 import com.vertexcubed.ad_infinitum.server.data.ChunkProtectedBlocks;
 import com.vertexcubed.ad_infinitum.server.data.HoloDoorSavedData;
 import com.vertexcubed.ad_infinitum.server.network.ServerboundUpdateHoloDoorSizePacket;
 import earth.terrarium.adastra.common.blockentities.base.EnergyContainerMachineBlockEntity;
-import earth.terrarium.adastra.common.blockentities.base.RedstoneControl;
 import earth.terrarium.adastra.common.blockentities.base.sideconfig.Configuration;
 import earth.terrarium.adastra.common.blockentities.base.sideconfig.ConfigurationEntry;
 import earth.terrarium.adastra.common.blockentities.base.sideconfig.ConfigurationType;

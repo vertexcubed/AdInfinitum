@@ -4,7 +4,10 @@ import com.vertexcubed.ad_infinitum.common.satellite.frequency.Frequency;
 import com.vertexcubed.ad_infinitum.server.data.SatelliteSavedData;
 import net.minecraft.server.level.ServerLevel;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class SatelliteManager {
 

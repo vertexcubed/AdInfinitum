@@ -1,7 +1,6 @@
 package com.vertexcubed.ad_infinitum.common.registry;
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
-import com.vertexcubed.ad_infinitum.common.satellite.Satellite;
 import com.vertexcubed.ad_infinitum.common.satellite.SatelliteType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

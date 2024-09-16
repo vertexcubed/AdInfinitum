@@ -2,7 +2,6 @@ package com.vertexcubed.ad_infinitum.server.network;
 
 
 import com.teamresourceful.resourcefullib.common.network.NetworkChannel;
-import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 
 

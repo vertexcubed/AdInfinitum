@@ -2,17 +2,13 @@ package com.vertexcubed.ad_infinitum.common.event;
 
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
-import com.vertexcubed.ad_infinitum.common.blockentity.HoloDoorBlockEntity;
 import com.vertexcubed.ad_infinitum.server.data.AdInfinitumPlanetData;
 import com.vertexcubed.ad_infinitum.server.data.ChunkProtectedBlocksProvider;
 import com.vertexcubed.ad_infinitum.server.network.ClientboundSyncUnlandablePlanetsPacket;
 import com.vertexcubed.ad_infinitum.server.network.PacketHandler;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

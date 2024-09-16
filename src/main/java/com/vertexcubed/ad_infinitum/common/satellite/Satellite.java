@@ -1,12 +1,9 @@
 package com.vertexcubed.ad_infinitum.common.satellite;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.registry.SatelliteRegistry;
 import com.vertexcubed.ad_infinitum.common.satellite.frequency.Frequency;
 import com.vertexcubed.ad_infinitum.common.satellite.frequency.FrequencyDataType;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 

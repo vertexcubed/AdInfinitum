@@ -2,16 +2,13 @@ package com.vertexcubed.ad_infinitum.common.multiblock;
 
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.multiblock.data.MultiblockData;
 import com.vertexcubed.ad_infinitum.common.multiblock.matcher.AirMatcher;
 import com.vertexcubed.ad_infinitum.common.multiblock.matcher.AnyMatcher;
 import com.vertexcubed.ad_infinitum.common.multiblock.matcher.StateMatcher;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;

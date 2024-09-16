@@ -6,9 +6,6 @@ import earth.terrarium.adastra.common.menus.base.MachineMenu;
 import earth.terrarium.adastra.common.menus.configuration.EnergyConfiguration;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.SimpleContainerData;
-import org.jetbrains.annotations.Nullable;
 
 public class HoloDoorMenu extends MachineMenu<HoloDoorBlockEntity> {
 

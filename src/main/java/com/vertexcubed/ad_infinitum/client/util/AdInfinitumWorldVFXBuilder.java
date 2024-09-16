@@ -2,16 +2,12 @@ package com.vertexcubed.ad_infinitum.client.util;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.util.Maath;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
-
-import java.util.Arrays;
 
 public class AdInfinitumWorldVFXBuilder extends VFXBuilders.WorldVFXBuilder {
 

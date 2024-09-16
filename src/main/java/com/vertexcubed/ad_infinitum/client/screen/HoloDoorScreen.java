@@ -17,7 +17,7 @@ public class HoloDoorScreen extends MachineScreen<HoloDoorMenu, HoloDoorBlockEnt
     public static final ResourceLocation SLOT = new ResourceLocation("ad_astra", "textures/gui/container/slots/steel.png");
 
     public HoloDoorScreen(HoloDoorMenu menu, Inventory inventory, Component component) {
-        super(menu, inventory, component, TEXTURE, SLOT, 184, 201);
+        super(menu, inventory, component, TEXTURE, SLOT, 177, 201);
     }
 
     @Override

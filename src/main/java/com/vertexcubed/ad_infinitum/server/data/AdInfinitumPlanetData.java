@@ -3,9 +3,7 @@ package com.vertexcubed.ad_infinitum.server.data;
 import earth.terrarium.adastra.api.planets.Planet;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AdInfinitumPlanetData {

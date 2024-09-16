@@ -2,7 +2,6 @@ package com.vertexcubed.ad_infinitum.common.multiblock.data;
 
 import com.mojang.serialization.Codec;
 import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
-import com.vertexcubed.ad_infinitum.common.multiblock.matcher.StateMatcher;
 import com.vertexcubed.ad_infinitum.common.registry.MultiblockDataRegistry;
 import net.minecraft.util.ExtraCodecs;
 

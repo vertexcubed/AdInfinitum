@@ -1,8 +1,6 @@
 package com.vertexcubed.ad_infinitum;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.logging.LogUtils;
-import com.vertexcubed.ad_infinitum.client.util.AdInfinitumWorldVFXBuilder;
 import com.vertexcubed.ad_infinitum.common.registry.*;
 import earth.terrarium.adastra.api.planets.PlanetApi;
 import earth.terrarium.adastra.common.network.messages.ServerboundConstructSpaceStationPacket;
@@ -17,7 +15,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-import team.lodestar.lodestone.systems.rendering.VFXBuilders;
 
 
 @Mod(AdInfinitum.MODID)

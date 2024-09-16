@@ -1,6 +1,5 @@
 package com.vertexcubed.ad_infinitum.mixin;
 
-import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.blockentity.HoloDoorBlockEntity;
 import earth.terrarium.adastra.common.utils.floodfill.FloodFill3D;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;

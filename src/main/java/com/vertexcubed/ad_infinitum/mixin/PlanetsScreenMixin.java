@@ -1,12 +1,10 @@
 package com.vertexcubed.ad_infinitum.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.vertexcubed.ad_infinitum.common.util.PlanetHelper;
 import earth.terrarium.adastra.api.planets.Planet;
 import earth.terrarium.adastra.client.screens.PlanetsScreen;
-import earth.terrarium.adastra.common.menus.PlanetsMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

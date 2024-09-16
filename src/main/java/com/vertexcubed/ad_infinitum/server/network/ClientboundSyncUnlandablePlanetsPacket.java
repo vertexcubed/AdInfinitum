@@ -7,11 +7,9 @@ import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.server.data.AdInfinitumPlanetData;
 import earth.terrarium.adastra.api.planets.Planet;
-import earth.terrarium.adastra.common.network.CodecPacketType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.vertexcubed.ad_infinitum.AdInfinitum.modLoc;

@@ -1,9 +1,6 @@
 package com.vertexcubed.ad_infinitum.client.renderer;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.client.shader.CoreShaderRegistry;
@@ -17,23 +14,19 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
 import team.lodestar.lodestone.handlers.RenderHandler;
 import team.lodestar.lodestone.registry.client.LodestoneRenderTypeRegistry;
-import team.lodestar.lodestone.registry.client.LodestoneShaderRegistry;
 import team.lodestar.lodestone.systems.rendering.LodestoneRenderType;
 import team.lodestar.lodestone.systems.rendering.StateShards;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
 import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeProvider;
 import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeToken;
 
-import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP;
 import static com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS;
-import static com.vertexcubed.ad_infinitum.AdInfinitum.modLoc;
 import static team.lodestar.lodestone.registry.client.LodestoneRenderTypeRegistry.createGenericRenderType;
 
 public class HoloDoorBlockEntityRenderer implements BlockEntityRenderer<HoloDoorBlockEntity> {

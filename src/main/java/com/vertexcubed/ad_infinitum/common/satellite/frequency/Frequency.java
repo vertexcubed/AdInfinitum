@@ -2,14 +2,10 @@ package com.vertexcubed.ad_infinitum.common.satellite.frequency;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.vertexcubed.ad_infinitum.AdInfinitum;
-import com.vertexcubed.ad_infinitum.common.satellite.Satellite;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.util.StringRepresentable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @ParametersAreNonnullByDefault

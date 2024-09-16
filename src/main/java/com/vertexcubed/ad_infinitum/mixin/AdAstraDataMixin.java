@@ -1,6 +1,5 @@
 package com.vertexcubed.ad_infinitum.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.vertexcubed.ad_infinitum.AdInfinitum;

@@ -1,6 +1,8 @@
 package com.vertexcubed.ad_infinitum.common.blockentity;
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
+import com.vertexcubed.ad_infinitum.common.menu.HoloDoorMenu;
+import com.vertexcubed.ad_infinitum.common.menu.SatelliteLauncherMenu;
 import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
 import com.vertexcubed.ad_infinitum.common.multiblock.data.GenericMachineData;
 import com.vertexcubed.ad_infinitum.common.util.InternalOnlyEnergyContainer;
@@ -24,7 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -114,7 +115,7 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return null;
+        return new SatelliteLauncherMenu(pContainerId, pPlayerInventory, this);
     }
 
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
