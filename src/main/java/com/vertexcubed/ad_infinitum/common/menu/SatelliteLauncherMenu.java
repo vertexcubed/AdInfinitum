@@ -21,18 +21,18 @@ public class SatelliteLauncherMenu extends MachineMenu<SatelliteLauncherBlockEnt
 
     @Override
     protected void addConfigSlots() {
-        this.addConfigSlot(new EnergyConfiguration(2, 147, 50, entity.getEnergyStorage()));
+        this.addConfigSlot(new EnergyConfiguration(0, 149, 21, entity.getEnergyStorage()));
     }
 
     @Override
     protected void addMenuSlots() {
         super.addMenuSlots();
-        int xStart = 29;
-        int yStart = 38;
-        this.addSlot(new Slot(this.entity, 1, xStart, yStart));
-        this.addSlot(new Slot(this.entity, 2, xStart + 18, yStart));
-        this.addSlot(new Slot(this.entity, 3, xStart, yStart + 18));
-        this.addSlot(new Slot(this.entity, 4, xStart + 18, yStart + 18));
+        int xStart = 8;
+        int yStart = 11;
+        this.addSlot(new SatelliteSlot(this.entity, 1, xStart, yStart));
+        this.addSlot(new SatelliteSlot(this.entity, 2, xStart + 18, yStart));
+        this.addSlot(new SatelliteSlot(this.entity, 3, xStart, yStart + 18));
+        this.addSlot(new SatelliteSlot(this.entity, 4, xStart + 18, yStart + 18));
     }
 
     @Override
@@ -52,7 +52,8 @@ public class SatelliteLauncherMenu extends MachineMenu<SatelliteLauncherBlockEnt
 
     @Override
     public int getPlayerInvYOffset() {
-        return 114;
+        return 98;
     }
+
 
 }

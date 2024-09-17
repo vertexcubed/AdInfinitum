@@ -1,13 +1,15 @@
 package com.vertexcubed.ad_infinitum.common.blockentity;
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
-import com.vertexcubed.ad_infinitum.common.menu.HoloDoorMenu;
 import com.vertexcubed.ad_infinitum.common.menu.SatelliteLauncherMenu;
 import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
 import com.vertexcubed.ad_infinitum.common.multiblock.data.GenericMachineData;
 import com.vertexcubed.ad_infinitum.common.util.InternalOnlyEnergyContainer;
 import earth.terrarium.adastra.common.blockentities.base.EnergyContainerMachineBlockEntity;
+import earth.terrarium.adastra.common.blockentities.base.sideconfig.Configuration;
 import earth.terrarium.adastra.common.blockentities.base.sideconfig.ConfigurationEntry;
+import earth.terrarium.adastra.common.blockentities.base.sideconfig.ConfigurationType;
+import earth.terrarium.adastra.common.constants.ConstantComponents;
 import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,6 +41,10 @@ import static com.vertexcubed.ad_infinitum.AdInfinitum.modLoc;
 
 public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEntity {
 
+    public static final List<ConfigurationEntry> SIDE_CONFIG = List.of(
+            new ConfigurationEntry(ConfigurationType.ENERGY, Configuration.NONE, ConstantComponents.SIDE_CONFIG_ENERGY)
+    );
+
     public static final ResourceLocation MULTIBLOCK_ID = modLoc("satellite_launcher");
     public static final int MAX_TRANSFER = 20000;
 
@@ -69,6 +75,10 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
         }
     }
 
+    public boolean isFormed() {
+        return isFormed;
+    }
+
     @Override
     public void serverTick(ServerLevel level, long time, BlockState state, BlockPos pos) {
         super.serverTick(level, time, state, pos);
@@ -95,7 +105,7 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
 
     @Override
     public List<ConfigurationEntry> getDefaultConfig() {
-        return List.of();
+        return SIDE_CONFIG;
     }
 
     @Override
@@ -118,10 +128,10 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
         return new SatelliteLauncherMenu(pContainerId, pPlayerInventory, this);
     }
 
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public boolean attemptToForm(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(multiblock == null) {
             AdInfinitum.LOGGER.warn("Multiblock is null!");
-            return InteractionResult.FAIL;
+            return false;
         }
 
         if(!isFormed) {
@@ -131,25 +141,20 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
             AdInfinitum.LOGGER.info("Multiblock already formed!");
         }
 
-
-        return InteractionResult.SUCCESS;
+        return isFormed;
     }
 
     private void checkForMultiblock(Level level, BlockPos pos) {
         Multiblock.TestResult result = multiblock.test(level, pos);
-        AdInfinitum.LOGGER.info("Multiblock found: " + result.found());
 
         if(!result.found()) return;
         isFormed = true;
         setChanged();
 
 
-        if(multiblock.getData().isPresent() && multiblock.getData().get() instanceof GenericMachineData data) {
-            AdInfinitum.LOGGER.info("Data found!");
-            List<BlockPos> relative = data.getDataPositions(GenericMachineData.DataType.ENERGY_IN, result.rotation());
+        if(multiblock.getData().isPresent() && multiblock.getData().get() instanceof GenericMachineData data) {List<BlockPos> relative = data.getDataPositions(GenericMachineData.DataType.ENERGY_IN, result.rotation());
             energyInputs.clear();
             energyInputs.addAll(relative);
-            AdInfinitum.LOGGER.info("Positions: " + relative.toString());
         }
     }
 

@@ -2,10 +2,13 @@ package com.vertexcubed.ad_infinitum.common.event;
 
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
+import com.vertexcubed.ad_infinitum.common.item.SatelliteItem;
+import com.vertexcubed.ad_infinitum.server.capability.SatelliteItemStorageProvider;
 import com.vertexcubed.ad_infinitum.server.data.AdInfinitumPlanetData;
 import com.vertexcubed.ad_infinitum.server.data.ChunkProtectedBlocksProvider;
 import com.vertexcubed.ad_infinitum.server.network.ClientboundSyncUnlandablePlanetsPacket;
 import com.vertexcubed.ad_infinitum.server.network.PacketHandler;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
@@ -17,6 +20,13 @@ public class ServerEvents {
     @SubscribeEvent
     public static void attachChunkCapabilities(AttachCapabilitiesEvent<LevelChunk> event) {
         event.addCapability(ChunkProtectedBlocksProvider.ID, new ChunkProtectedBlocksProvider(event.getObject()));
+    }
+
+    @SubscribeEvent
+    public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
+        if(event.getObject().getItem() instanceof SatelliteItem) {
+            event.addCapability(SatelliteItemStorageProvider.ID, new SatelliteItemStorageProvider());
+        }
     }
 
     @SubscribeEvent

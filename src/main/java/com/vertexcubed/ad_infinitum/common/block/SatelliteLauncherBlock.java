@@ -5,6 +5,7 @@ import com.vertexcubed.ad_infinitum.common.blockentity.SatelliteLauncherBlockEnt
 import com.vertexcubed.ad_infinitum.common.registry.BlockRegistry;
 import earth.terrarium.adastra.common.blocks.base.MachineBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,12 +26,24 @@ public class SatelliteLauncherBlock extends MachineBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        AdInfinitum.LOGGER.info("Using!");
-        if(level.getBlockEntity(pos) instanceof SatelliteLauncherBlockEntity be) {
-            InteractionResult beResult = be.use(state,level,pos,player,hand,hit);
+        if (!(level.getBlockEntity(pos) instanceof SatelliteLauncherBlockEntity be)) return InteractionResult.PASS;
+
+        if(be.isFormed()) {
+            return super.use(state, level, pos, player, hand, hit);
+        }
+
+        boolean successForm = be.attemptToForm(state,level,pos,player,hand,hit);
+        if(successForm) {
+
+            if(!level.isClientSide) {
+                player.sendSystemMessage(Component.literal("Multiblock formed!"));
+            }
+            return InteractionResult.SUCCESS;
         }
 
 
-        return super.use(state, level, pos, player, hand, hit);
+        //print error message
+        return InteractionResult.CONSUME;
+
     }
 }

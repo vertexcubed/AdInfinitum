@@ -8,6 +8,7 @@ import com.vertexcubed.ad_infinitum.client.shader.CoreShaderRegistry;
 import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
 import com.vertexcubed.ad_infinitum.common.registry.BlockRegistry;
 import com.vertexcubed.ad_infinitum.common.registry.MenuRegistry;
+import com.vertexcubed.ad_infinitum.server.capability.SatelliteItemStorage;
 import com.vertexcubed.ad_infinitum.server.data.ChunkProtectedBlocks;
 import com.vertexcubed.ad_infinitum.server.network.PacketHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -28,6 +29,7 @@ public class ModBusEvents {
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.register(ChunkProtectedBlocks.class);
+        event.register(SatelliteItemStorage.class);
     }
 
     @SubscribeEvent
@@ -47,8 +49,10 @@ public class ModBusEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        MenuScreens.register(MenuRegistry.SATELLITE_LAUNCHER.get(), SatelliteLauncherScreen::new);
-        MenuScreens.register(MenuRegistry.HOLO_DOOR.get(), HoloDoorScreen::new);
+        event.enqueueWork(() -> {
+            MenuScreens.register(MenuRegistry.SATELLITE_LAUNCHER.get(), SatelliteLauncherScreen::new);
+            MenuScreens.register(MenuRegistry.HOLO_DOOR.get(), HoloDoorScreen::new);
+        });
     }
 
     @SubscribeEvent
