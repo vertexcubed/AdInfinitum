@@ -35,6 +35,10 @@ public abstract class Satellite {
         this.owner = owner;
     }
 
+    public SatelliteType<?> getType() {
+        return type;
+    }
+
     public UUID getId() {
         return id;
     }

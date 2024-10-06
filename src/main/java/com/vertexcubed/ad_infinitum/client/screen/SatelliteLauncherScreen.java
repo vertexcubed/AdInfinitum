@@ -1,6 +1,9 @@
 package com.vertexcubed.ad_infinitum.client.screen;
 
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
+import com.vertexcubed.ad_infinitum.client.renderer.SatelliteRenderDispatcher;
 import com.vertexcubed.ad_infinitum.common.blockentity.SatelliteLauncherBlockEntity;
 import com.vertexcubed.ad_infinitum.common.item.SatelliteItem;
 import com.vertexcubed.ad_infinitum.common.menu.SatelliteLauncherMenu;
@@ -18,6 +21,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -118,10 +123,25 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
                 ItemStack stack = slot.getItem();
                 Satellite satellite = satelliteItem.getSatellite(stack);
                 if(satellite != null) {
+
+                    RenderSystem.applyModelViewMatrix();
+                    MultiBufferSource.BufferSource buffer = graphics.bufferSource();
+                    Lighting.setupForEntityInInventory();
+                    graphics.pose().pushPose();
+                    graphics.pose().translate(x, y, 50);
+                    RenderSystem.runAsFancy(() -> {
+//                     AdInfinitum.LOGGER.info("Rendering satellite in GUI");
+                        SatelliteRenderDispatcher.INSTANCE.render(satellite, 0, 0, 0, partialTicks, graphics.pose(), buffer, LightTexture.FULL_BRIGHT);
+                    });
+                    graphics.pose().popPose();
+                    graphics.flush();
+                    Lighting.setupFor3DItems();
+
+
+
 //                AdInfinitum.LOGGER.info("Satellite: " + satellite);
                     Font font = Minecraft.getInstance().font;
                     graphics.enableScissor(x + 85, y, x + width - 2, y + height - 2);
-
                     graphics.pose().pushPose();
                     graphics.pose().translate(x + 88, y + 6, 0.0);
                     graphics.pose().scale(0.75f, 0.75f, 0.75f);
