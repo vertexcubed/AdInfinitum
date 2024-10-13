@@ -19,5 +19,6 @@ public class PacketHandler {
         CHANNEL.register(ClientboundSyncUnlandablePlanetsPacket.TYPE);
         CHANNEL.register(ServerboundUpdateHoloDoorSizePacket.TYPE);
         CHANNEL.register(ClientboundSyncSatelliteItemStoragePacket.TYPE);
+        CHANNEL.register(ServerboundLaunchSatellitesPacket.TYPE);
     }
 }

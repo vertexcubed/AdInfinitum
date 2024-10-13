@@ -10,6 +10,9 @@ import com.vertexcubed.ad_infinitum.common.menu.SatelliteLauncherMenu;
 import com.vertexcubed.ad_infinitum.common.menu.SatelliteSlot;
 import com.vertexcubed.ad_infinitum.common.satellite.Satellite;
 import com.vertexcubed.ad_infinitum.server.capability.SatelliteItemStorage;
+import com.vertexcubed.ad_infinitum.server.network.PacketHandler;
+import com.vertexcubed.ad_infinitum.server.network.ServerboundLaunchSatellitesPacket;
+import com.vertexcubed.ad_infinitum.server.network.ServerboundUpdateHoloDoorSizePacket;
 import earth.terrarium.adastra.client.components.PressableImageButton;
 import earth.terrarium.adastra.client.components.base.ContainerWidget;
 import earth.terrarium.adastra.client.components.machines.OptionsBarWidget;
@@ -61,11 +64,25 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
                 ((InventorySlot) slot).setActive(!editSatellite.isActive());
             });
         }));
+        this.addRenderableWidget(new TextButton(leftPos + 79, topPos + 53, 45, Component.literal("Launch"), b -> {
+            this.launchSatellites();
+        }));
         List<SatelliteConfigWidget> configSlots = new ArrayList<>();
         this.menu.slots.stream().filter(s -> s instanceof SatelliteSlot).forEach(slot -> {
             configSlots.add(this.addRenderableWidget(new SatelliteConfigWidget(this, slot.index, leftPos + slot.x, topPos + slot.y)));
         });
     }
+
+    public void launchSatellites() {
+//        this.menu.slots.stream().filter(s -> s instanceof SatelliteSlot).forEach(slot -> {
+//            slot.set(ItemStack.EMPTY);
+//        });
+        //send packet to server
+        PacketHandler.CHANNEL.sendToServer(new ServerboundLaunchSatellitesPacket(entity.getBlockPos()));
+        entity.launchSatellites(entity.level());
+    }
+
+
 
     @Override
     public boolean canConfigure() {

@@ -24,11 +24,13 @@ public class SatelliteSavedData extends SavedData {
     private final Map<UUID, Satellite> satellites;
 
     public SatelliteSavedData() {
+        AdInfinitum.LOGGER.info("Creating new satellite data");
         frequencies = new HashMap<>();
         satellites = new HashMap<>();
     }
 
     public SatelliteSavedData(CompoundTag tag) {
+        AdInfinitum.LOGGER.info(tag.toString());
         frequencies = new HashMap<>();
         ListTag list = tag.getList("frequencies", ListTag.TAG_COMPOUND);
         list.forEach(entry -> {
@@ -37,12 +39,13 @@ public class SatelliteSavedData extends SavedData {
         satellites = new HashMap<>();
         ListTag list2 = tag.getList("satellites", ListTag.TAG_COMPOUND);
         list2.forEach(entry -> {
-            SatelliteType<?> type = SatelliteRegistry.SATELLITE_TYPE_REGISTRY.get().getValue(new ResourceLocation(((CompoundTag) entry).getString("type")));
+            CompoundTag value = ((CompoundTag) entry).getCompound("value");
+            SatelliteType<?> type = SatelliteRegistry.SATELLITE_TYPE_REGISTRY.get().getValue(new ResourceLocation(value.getString("type")));
             if(type == null) {
-                throw new NullPointerException("Undefined satellite type: " + ((CompoundTag) entry).getString("type"));
+                throw new NullPointerException("Undefined satellite type: " + value.getString("type"));
             }
-            Satellite s = type.createSatellite((CompoundTag) entry);
-            satellites.put(s.getId(), s);
+            Satellite s = type.createSatellite(value);
+            satellites.put(((CompoundTag) entry).getUUID("key"), s);
         });
     }
 
@@ -85,6 +88,7 @@ public class SatelliteSavedData extends SavedData {
 
     @Override
     public CompoundTag save(CompoundTag tag) {
+        AdInfinitum.LOGGER.info("Saving satellite data to disk!");
         ListTag list1 = new ListTag();
         frequencies.forEach((uuid, frequency) -> {
             CompoundTag entry = new CompoundTag();
@@ -105,7 +109,9 @@ public class SatelliteSavedData extends SavedData {
     }
 
     public static SatelliteSavedData load(CompoundTag tag) {
-        return new SatelliteSavedData(tag.getCompound(DATA_ID));
+        AdInfinitum.LOGGER.info("Loading satellite data from disk!");
+        AdInfinitum.LOGGER.info(tag.toString());
+        return new SatelliteSavedData(tag);
     }
 
     public static SatelliteSavedData getOrLoad(MinecraftServer server) {

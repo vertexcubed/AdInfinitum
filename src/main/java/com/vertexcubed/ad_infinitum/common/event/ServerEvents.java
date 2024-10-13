@@ -2,7 +2,9 @@ package com.vertexcubed.ad_infinitum.common.event;
 
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
+import com.vertexcubed.ad_infinitum.common.command.SatellitesCommand;
 import com.vertexcubed.ad_infinitum.common.item.SatelliteItem;
+import com.vertexcubed.ad_infinitum.common.satellite.SatelliteManager;
 import com.vertexcubed.ad_infinitum.server.capability.SatelliteItemStorageProvider;
 import com.vertexcubed.ad_infinitum.server.data.AdInfinitumPlanetData;
 import com.vertexcubed.ad_infinitum.server.data.ChunkProtectedBlocksProvider;
@@ -12,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -44,4 +48,15 @@ public class ServerEvents {
 //            }
 //        }
 //    }
+
+
+    @SubscribeEvent
+    public static void regsiterCommands(RegisterCommandsEvent event) {
+        SatellitesCommand.register(event.getDispatcher());
+    }
+
+    @SubscribeEvent
+    public static void onServerLoad(ServerStartedEvent event) {
+        SatelliteManager.init(event.getServer().overworld());
+    }
 }

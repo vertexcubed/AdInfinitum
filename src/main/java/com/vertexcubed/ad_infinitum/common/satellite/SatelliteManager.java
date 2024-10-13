@@ -1,7 +1,9 @@
 package com.vertexcubed.ad_infinitum.common.satellite;
 
+import com.google.common.collect.ImmutableList;
 import com.vertexcubed.ad_infinitum.common.satellite.frequency.Frequency;
 import com.vertexcubed.ad_infinitum.server.data.SatelliteSavedData;
+import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.HashMap;
@@ -17,6 +19,8 @@ public class SatelliteManager {
      * Read from disk. Only call on the SERVER.
      */
     public static void init(ServerLevel serverLevel) {
+        satellites.clear();
+        satellites.putAll(getData(serverLevel).getSatellites());
 
     }
 
@@ -62,6 +66,10 @@ public class SatelliteManager {
         //save to disk
         getData(serverLevel).removeSatellite(id);
         //sync to players
+    }
+
+    public static List<Satellite> getAllSatellites() {
+        return ImmutableList.copyOf(satellites.values());
     }
 
     private static SatelliteSavedData getData(ServerLevel serverLevel) {

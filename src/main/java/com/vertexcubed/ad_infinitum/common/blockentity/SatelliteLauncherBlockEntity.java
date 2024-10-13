@@ -1,9 +1,11 @@
 package com.vertexcubed.ad_infinitum.common.blockentity;
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
+import com.vertexcubed.ad_infinitum.common.item.SatelliteItem;
 import com.vertexcubed.ad_infinitum.common.menu.SatelliteLauncherMenu;
 import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
 import com.vertexcubed.ad_infinitum.common.multiblock.data.GenericMachineData;
+import com.vertexcubed.ad_infinitum.common.satellite.SatelliteManager;
 import com.vertexcubed.ad_infinitum.common.util.InternalOnlyEnergyContainer;
 import earth.terrarium.adastra.common.blockentities.base.EnergyContainerMachineBlockEntity;
 import earth.terrarium.adastra.common.blockentities.base.sideconfig.Configuration;
@@ -22,6 +24,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -156,6 +159,19 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
             energyInputs.clear();
             energyInputs.addAll(relative);
         }
+    }
+
+    public void launchSatellites(Level level) {
+        AdInfinitum.LOGGER.info("Launching satellites, client: " + level.isClientSide);
+        if(level instanceof ServerLevel serverLevel) {
+            this.items().forEach(item -> {
+                if(!(item.getItem() instanceof SatelliteItem satelliteItem)) return;
+                SatelliteManager.addSatellite(serverLevel, satelliteItem.getSatellite(item));
+            });
+        }
+        this.clearContent();
+        this.setChanged();
+        AdInfinitum.LOGGER.info("Satellites: " + SatelliteManager.getAllSatellites());
     }
 
     @Override
