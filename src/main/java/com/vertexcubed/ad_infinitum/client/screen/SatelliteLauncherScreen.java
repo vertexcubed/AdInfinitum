@@ -79,7 +79,7 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
 //        });
         //send packet to server
         PacketHandler.CHANNEL.sendToServer(new ServerboundLaunchSatellitesPacket(entity.getBlockPos()));
-        entity.launchSatellites(entity.level());
+        entity.startLaunching();
     }
 
 

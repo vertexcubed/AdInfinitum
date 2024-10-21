@@ -28,8 +28,9 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
-        if(event.getObject().getItem() instanceof SatelliteItem) {
+        if(event.getObject().getItem() instanceof SatelliteItem item) {
             event.addCapability(SatelliteItemStorageProvider.ID, new SatelliteItemStorageProvider());
+
         }
     }
 

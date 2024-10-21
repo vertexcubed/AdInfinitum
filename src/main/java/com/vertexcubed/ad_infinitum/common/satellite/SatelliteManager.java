@@ -68,6 +68,14 @@ public class SatelliteManager {
         //sync to players
     }
 
+    /**
+     * Only ever call this on the SERVER.
+     */
+    public static void clearSatellites(ServerLevel serverLevel) {
+        satellites.clear();
+        getData(serverLevel).clearSatellites();
+    }
+
     public static List<Satellite> getAllSatellites() {
         return ImmutableList.copyOf(satellites.values());
     }

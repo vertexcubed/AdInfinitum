@@ -5,6 +5,7 @@ import com.vertexcubed.ad_infinitum.common.item.SatelliteItem;
 import com.vertexcubed.ad_infinitum.common.menu.SatelliteLauncherMenu;
 import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
 import com.vertexcubed.ad_infinitum.common.multiblock.data.GenericMachineData;
+import com.vertexcubed.ad_infinitum.common.satellite.Satellite;
 import com.vertexcubed.ad_infinitum.common.satellite.SatelliteManager;
 import com.vertexcubed.ad_infinitum.common.util.InternalOnlyEnergyContainer;
 import earth.terrarium.adastra.common.blockentities.base.EnergyContainerMachineBlockEntity;
@@ -20,7 +21,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -49,17 +49,23 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
     );
 
     public static final ResourceLocation MULTIBLOCK_ID = modLoc("satellite_launcher");
-    public static final int MAX_TRANSFER = 20000;
-
+    public static final int MAX_TRANSFER = 32767;
+    public static final int LAUNCH_ENERGY = 1024;
 
     private Multiblock multiblock;
 
     private boolean isFormed = false;
     private final List<BlockPos> energyInputs = new ArrayList<>();
 
+    protected int launchTime;
+    protected int launchTimeTotal;
+    protected boolean launching;
     public SatelliteLauncherBlockEntity(BlockPos pos, BlockState state) {
         super(pos, state, 5);
 
+        launchTime = 0;
+        launchTimeTotal = 100;
+        launching = false;
     }
 
     @Override
@@ -100,11 +106,54 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
                     getEnergyStorage().internalInsert(energy.extractEnergy(inserted, false), false);
                 });
             }
-
         });
 
-
+        if(canFunction() && launching) {
+            launchTick(level, this.getEnergyStorage());
+        }
     }
+
+    public void launchTick(Level level, WrappedBlockEnergyContainer energyStorage) {
+        if(energyStorage.internalExtract(LAUNCH_ENERGY, true) < LAUNCH_ENERGY) {
+            failLaunch(level);
+            return;
+        }
+        energyStorage.internalExtract(LAUNCH_ENERGY, false);
+        launchTime++;
+
+        if(launchTime >= launchTimeTotal) {
+            this.launchSatellites(level);
+        }
+    }
+
+    public void startLaunching() {
+        this.launching = true;
+    }
+
+    public void launchSatellites(Level level) {
+        launching = false;
+        launchTime = 0;
+
+        AdInfinitum.LOGGER.info("Launching satellites, client: " + level.isClientSide);
+        if(level instanceof ServerLevel serverLevel) {
+            for(int i = 0; i < items().size(); i++) {
+                if(!(items().get(i).getItem() instanceof SatelliteItem satelliteItem)) continue;
+                Satellite satellite = satelliteItem.getSatellite(items().get(i));
+                if(satellite == null) continue;
+                SatelliteManager.addSatellite(serverLevel, satellite);
+                items().set(0, ItemStack.EMPTY);
+            }
+        }
+        this.setChanged();
+        AdInfinitum.LOGGER.info("Satellites: " + SatelliteManager.getAllSatellites());
+    }
+
+    public void failLaunch(Level level) {
+        launching = false;
+        launchTime = 0;
+    }
+
+
 
     @Override
     public List<ConfigurationEntry> getDefaultConfig() {
@@ -133,15 +182,12 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
 
     public boolean attemptToForm(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(multiblock == null) {
-            AdInfinitum.LOGGER.warn("Multiblock is null!");
+            AdInfinitum.LOGGER.warn("Multiblock for BE" + this + " is null, cannot form!");
             return false;
         }
 
         if(!isFormed) {
             checkForMultiblock(level, pos);
-        }
-        else {
-            AdInfinitum.LOGGER.info("Multiblock already formed!");
         }
 
         return isFormed;
@@ -161,29 +207,22 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
         }
     }
 
-    public void launchSatellites(Level level) {
-        AdInfinitum.LOGGER.info("Launching satellites, client: " + level.isClientSide);
-        if(level instanceof ServerLevel serverLevel) {
-            this.items().forEach(item -> {
-                if(!(item.getItem() instanceof SatelliteItem satelliteItem)) return;
-                SatelliteManager.addSatellite(serverLevel, satelliteItem.getSatellite(item));
-            });
-        }
-        this.clearContent();
-        this.setChanged();
-        AdInfinitum.LOGGER.info("Satellites: " + SatelliteManager.getAllSatellites());
-    }
-
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putBoolean("isFormed", isFormed);
+        tag.putInt("launchTime", launchTime);
+        tag.putInt("launchTimeTotal", launchTimeTotal);
+        tag.putBoolean("launching", launching);
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         isFormed = tag.getBoolean("isFormed");
+        launchTime = tag.getInt("launchTime");
+        launchTimeTotal = tag.getInt("launchTimeTotal");
+        launching = tag.getBoolean("launching");
     }
 
     @SubscribeEvent

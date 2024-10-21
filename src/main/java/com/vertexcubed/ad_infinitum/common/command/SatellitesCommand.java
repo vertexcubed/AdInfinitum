@@ -29,6 +29,9 @@ public class SatellitesCommand {
                                         .executes(ctx -> getSatellite(ctx.getSource(), UuidArgument.getUuid(ctx, "uuid")))
                                 )
                         )
+                        .then(literal("clear")
+                                .executes(ctx -> clearSatellites(ctx.getSource()))
+                        )
                 )
         );
     }
@@ -41,6 +44,12 @@ public class SatellitesCommand {
         else {
             ctx.sendSuccess(() -> Component.literal(SatelliteManager.getSatellite(uuid).toString()), true);
         }
+        return 1;
+    }
+
+    public static int clearSatellites(CommandSourceStack ctx) {
+        SatelliteManager.clearSatellites(ctx.getLevel());
+        ctx.sendSuccess(() -> Component.translatable("command.ad_infinitum.clear_satellites"), true);
         return 1;
     }
 }

@@ -1,3 +1,5 @@
 {
-    "planet.ad_infinitum.sun": "The Sun"
+    "planet.ad_infinitum.sun": "The Sun",
+    "command.ad_infinitum.clear_satellites": "Cleared all satellites.",
+    "tooltip.ad_infinitum.empty_satellite": "No satellite present."
 }

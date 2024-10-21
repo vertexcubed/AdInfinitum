@@ -82,6 +82,11 @@ public class SatelliteSavedData extends SavedData {
         setDirty();
     }
 
+    public void clearSatellites() {
+        satellites.clear();
+        setDirty();
+    }
+
     public Map<UUID, Satellite> getSatellites() {
         return satellites;
     }

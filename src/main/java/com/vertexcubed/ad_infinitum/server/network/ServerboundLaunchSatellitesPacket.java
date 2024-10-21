@@ -36,7 +36,7 @@ public record ServerboundLaunchSatellitesPacket(BlockPos pos) implements Packet<
                     AdInfinitum.LOGGER.error("Cannot handle launch satellites packet, no BE!");
                     return;
                 }
-                launcher.launchSatellites(player.level());
+                launcher.startLaunching();
 
             };
         }
