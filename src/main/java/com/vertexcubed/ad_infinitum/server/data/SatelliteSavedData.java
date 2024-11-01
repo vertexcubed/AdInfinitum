@@ -54,12 +54,12 @@ public class SatelliteSavedData extends SavedData {
     }
 
     public void addFrequency(Frequency frequency) {
-        frequencies.put(frequency.getId(), frequency);
+        frequencies.putIfAbsent(frequency.getId(), frequency);
         setDirty();
     }
 
     public void addSatellite(Satellite satellite) {
-        satellites.put(satellite.getId(), satellite);
+        satellites.putIfAbsent(satellite.getId(), satellite);
         setDirty();
     }
 

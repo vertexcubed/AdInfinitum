@@ -28,7 +28,7 @@ public class SatelliteManager {
      * Only ever call this on the SERVER.
      */
     public static void addSatellite(ServerLevel serverLevel, Satellite satellite) {
-        satellites.put(satellite.getId(), satellite);
+        satellites.putIfAbsent(satellite.getId(), satellite);
         //Save to disk
         getData(serverLevel).addSatellite(satellite);
         //sync to players

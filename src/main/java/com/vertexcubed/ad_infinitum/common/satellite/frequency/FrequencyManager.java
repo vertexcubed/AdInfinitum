@@ -24,7 +24,7 @@ public class FrequencyManager {
      * Only ever call this on the SERVER.
      */
     public static void addFrequency(ServerLevel serverLevel, Frequency frequency) {
-        frequencies.put(frequency.getId(), frequency);
+        frequencies.putIfAbsent(frequency.getId(), frequency);
         //Save to disk
         getData(serverLevel).addFrequency(frequency);
         //sync to players

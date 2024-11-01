@@ -4,6 +4,7 @@ import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.common.item.SatelliteItem;
 import com.vertexcubed.ad_infinitum.common.menu.SatelliteLauncherMenu;
 import com.vertexcubed.ad_infinitum.common.multiblock.Multiblock;
+import com.vertexcubed.ad_infinitum.common.multiblock.MultiblockEventListener;
 import com.vertexcubed.ad_infinitum.common.multiblock.data.GenericMachineData;
 import com.vertexcubed.ad_infinitum.common.satellite.Satellite;
 import com.vertexcubed.ad_infinitum.common.satellite.SatelliteManager;
@@ -141,11 +142,10 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
                 Satellite satellite = satelliteItem.getSatellite(items().get(i));
                 if(satellite == null) continue;
                 SatelliteManager.addSatellite(serverLevel, satellite);
-                items().set(0, ItemStack.EMPTY);
+                this.setItem(i, ItemStack.EMPTY);
             }
         }
         this.setChanged();
-        AdInfinitum.LOGGER.info("Satellites: " + SatelliteManager.getAllSatellites());
     }
 
     public void failLaunch(Level level) {
@@ -201,10 +201,21 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
         setChanged();
 
 
-        if(multiblock.getData().isPresent() && multiblock.getData().get() instanceof GenericMachineData data) {List<BlockPos> relative = data.getDataPositions(GenericMachineData.DataType.ENERGY_IN, result.rotation());
+        if(multiblock.getData().isPresent() && multiblock.getData().get() instanceof GenericMachineData data) {
+            List<BlockPos> relative = data.getDataPositions(GenericMachineData.DataType.ENERGY_IN, result.rotation());
             energyInputs.clear();
             energyInputs.addAll(relative);
         }
+
+        this.sendFormEvent(result, level, pos);
+    }
+
+    private void sendFormEvent(Multiblock.TestResult result, Level level, BlockPos pos) {
+        result.eventListeners().forEach((listenerPos, listener) -> listener.onMultiblockForm(level, this.multiblock, level.getBlockState(listenerPos), pos));
+    }
+
+    private void sendUnformEvent(Level level, BlockPos pos) {
+
     }
 
     @Override
@@ -229,15 +240,17 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
     public void onBlockUpdate(BlockEvent.NeighborNotifyEvent event) {
         if(!this.isFormed || multiblock == null) return;
         BlockPos pos = event.getPos().subtract(this.worldPosition.subtract(multiblock.getCenter()));
-        if(multiblock.inBounds(pos)) {
-            Multiblock.TestResult result = multiblock.test(level, this.worldPosition);
-            if(!result.found()) {
-                BlockState oldState = event.getState();
-                isFormed = false;
-                setChanged();
-                Level level = ((Level) event.getLevel());
-                level.sendBlockUpdated(this.worldPosition, oldState, level.getBlockState(this.worldPosition), 3);
-            }
+        if (!multiblock.inBounds(pos)) return;
+
+
+        Multiblock.TestResult result = multiblock.test(level, this.worldPosition);
+        if(!result.found()) {
+            BlockState oldState = event.getState();
+            isFormed = false;
+            setChanged();
+            Level level = ((Level) event.getLevel());
+            level.sendBlockUpdated(this.worldPosition, oldState, level.getBlockState(this.worldPosition), 3);
+            this.sendUnformEvent(level, this.worldPosition);
         }
     }
 

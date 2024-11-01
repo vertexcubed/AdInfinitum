@@ -13,7 +13,7 @@ public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, AdInfinitum.MODID);
     public static final RegistryObject<Item> DEBUG_ITEM = ITEMS.register("debug", () -> new DebugItem(new Item.Properties()));
 
-    public static final RegistryObject<Item> TEST_SATELLITE = ITEMS.register("test_satellite", () -> new TestSatelliteItem(new Item.Properties()));
+    public static final RegistryObject<Item> TEST_SATELLITE = ITEMS.register("test_satellite", () -> new TestSatelliteItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

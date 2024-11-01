@@ -2,6 +2,7 @@ package com.vertexcubed.ad_infinitum.common.multiblock;
 
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.vertexcubed.ad_infinitum.common.multiblock.data.MultiblockData;
@@ -16,9 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.vertexcubed.ad_infinitum.AdInfinitum.modLoc;
 
@@ -124,31 +123,53 @@ public class Multiblock {
         return data;
     }
 
-    //x y z starting from 0,0,0 in multiblock space
     public TestResult test(Level level, BlockPos center) {
         for(Rotation rotation : Rotation.values()) {
-            if(test(level, center, rotation)) return new TestResult(true, rotation);
+            Pair<Boolean, Map<BlockPos, MultiblockEventListener>> testResultRaw = testInternal(level, center, rotation);
+            if(testResultRaw.getFirst()) {
+                return new TestResult(true, rotation, testResultRaw.getSecond());
+            }
         }
-        return new TestResult(false, Rotation.NONE);
+        return new TestResult(false, Rotation.NONE, Map.of());
     }
 
-    public boolean test(Level level, BlockPos centerWorld, Rotation rotation) {
+    public TestResult test(Level level, BlockPos center, Rotation rotation) {
+        Pair<Boolean, Map<BlockPos, MultiblockEventListener>> testResultRaw = testInternal(level, center, rotation);
+        return new TestResult(testResultRaw.getFirst(), rotation, testResultRaw.getSecond());
+    }
+
+
+    //x y z starting from 0,0,0 in multiblock space
+    private Pair<Boolean, Map<BlockPos, MultiblockEventListener>> testInternal(Level level, BlockPos centerWorld, Rotation rotation) {
         BlockPos offset = centerWorld.subtract(this.center);
+        Map<BlockPos, MultiblockEventListener> listenerMap = new HashMap<>();
         for(int y = 0; y < size.getY(); y++) {
             for(int z = 0; z < size.getZ(); z++) {
                 for(int x = 0; x < size.getX(); x++) {
                     BlockPos original = new BlockPos(x, y, z);
                     BlockPos rotated = original.subtract(this.center).rotate(rotation).offset(this.center);
-                    if(!test(level, offset, rotated, original)) {
-                        return false;
+                    //Check if block is valid
+                    if(!testPosition(level, offset, rotated, original)) {
+                        return Pair.of(false, Map.of());
+                    }
+                    else {
+                        //Block is valid. Now check if block is a MultiblockEventListener
+                        BlockPos checkPos = rotated.offset(offset);
+                        //May remove support for Block listeners and only allow BE listeners idk
+                        if(level.getBlockState(checkPos).getBlock() instanceof MultiblockEventListener listener) {
+                            listenerMap.put(checkPos, listener);
+                        }
+                        if(level.getBlockEntity(checkPos) instanceof  MultiblockEventListener listener) {
+                            listenerMap.put(checkPos, listener);
+                        }
                     }
                 }
             }
         }
-        return true;
+        return Pair.of(true, Map.copyOf(listenerMap));
     }
 
-    public boolean test(Level level, BlockPos offset, BlockPos rotatedPos, BlockPos original) {
+    private boolean testPosition(Level level, BlockPos offset, BlockPos rotatedPos, BlockPos original) {
 
         if(!inBounds(original)) return false;
 
@@ -172,5 +193,5 @@ public class Multiblock {
 
 
 
-    public record TestResult(Boolean found, Rotation rotation) {}
+    public record TestResult(Boolean found, Rotation rotation, Map<BlockPos, MultiblockEventListener> eventListeners) {}
 }
