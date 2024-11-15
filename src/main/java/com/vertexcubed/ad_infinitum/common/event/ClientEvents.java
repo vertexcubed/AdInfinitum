@@ -4,11 +4,16 @@ package com.vertexcubed.ad_infinitum.common.event;
 import com.mojang.math.Axis;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.client.renderer.SatelliteRenderDispatcher;
+import com.vertexcubed.ad_infinitum.client.shader.HeatDistortionPostProcessor;
+import com.vertexcubed.ad_infinitum.common.registry.TagRegistry;
 import com.vertexcubed.ad_infinitum.common.satellite.TestSatellite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -30,5 +35,23 @@ public class ClientEvents {
         event.getPoseStack().popPose();
     }
 
+
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if(event.phase == TickEvent.Phase.START) return;
+        if(Minecraft.getInstance().level == null) return;
+
+        if(Minecraft.getInstance().level.dimensionTypeRegistration().is(TagRegistry.SUPER_HOT_DIMENSIONS)) {
+            //This does trigger correctly.
+            if(!HeatDistortionPostProcessor.INSTANCE.isActive()) {
+                HeatDistortionPostProcessor.INSTANCE.setActive(true);
+            }
+        }
+        else {
+            if(HeatDistortionPostProcessor.INSTANCE.isActive()) {
+                HeatDistortionPostProcessor.INSTANCE.setActive(false);
+            }
+        }
+    }
 
 }

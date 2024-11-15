@@ -1,0 +1,21 @@
+{
+    "targets": [
+        "final"
+    ],
+    "passes": [
+        {
+            "name": "ad_infinitum:heat_distortion",
+            "intarget": "minecraft:main",
+            "outtarget": "final",
+            "uniforms": [
+                { "name": "Intensity", "values": [ 3.0 ] },
+                { "name": "Scale", "values": [ 0.75 ] }
+            ]
+        },
+        {
+            "name": "blit",
+            "intarget": "final",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}

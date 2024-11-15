@@ -14,6 +14,7 @@
     },
     "refmap": "mixins.ad_infinitum.refmap.json",
     "client": [
-        "PlanetsScreenMixin"
+        "PlanetsScreenMixin",
+        "client.CreativeModeInventoryScreenMixin"
     ]
 }

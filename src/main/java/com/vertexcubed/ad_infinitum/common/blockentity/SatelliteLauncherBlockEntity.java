@@ -92,7 +92,12 @@ public class SatelliteLauncherBlockEntity extends EnergyContainerMachineBlockEnt
     @Override
     public void serverTick(ServerLevel level, long time, BlockState state, BlockPos pos) {
         super.serverTick(level, time, state, pos);
-        if(!isFormed) return;
+        if(!isFormed) {
+            if(launching) {
+                failLaunch(level);
+            }
+            return;
+        }
         energyInputs.forEach(relativePos -> {
             BlockPos energyInput = relativePos.offset(pos);
             BlockEntity blockEntity = level.getBlockEntity(energyInput);

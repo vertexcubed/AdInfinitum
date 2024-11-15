@@ -1,6 +1,7 @@
 package com.vertexcubed.ad_infinitum;
 
 import com.mojang.logging.LogUtils;
+import com.vertexcubed.ad_infinitum.client.shader.HeatDistortionPostProcessor;
 import com.vertexcubed.ad_infinitum.common.registry.*;
 import earth.terrarium.adastra.api.planets.PlanetApi;
 import earth.terrarium.adastra.common.network.messages.ServerboundConstructSpaceStationPacket;
@@ -12,9 +13,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
 
 @Mod(AdInfinitum.MODID)
@@ -61,4 +65,13 @@ public class AdInfinitum {
         SatelliteRegistry.register(modEventBus);
     }
 
+
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = MODID)
+    public static class Client {
+
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            PostProcessHandler.addInstance(HeatDistortionPostProcessor.INSTANCE);
+        }
+    }
 }
