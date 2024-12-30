@@ -3,6 +3,7 @@
     "package": "com.vertexcubed.ad_infinitum.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "AbstractContainerMenuMixin",
         "AdAstraDataMixin",
         "DebuggingSpaceStation",
         "FloodFill3DMixin",

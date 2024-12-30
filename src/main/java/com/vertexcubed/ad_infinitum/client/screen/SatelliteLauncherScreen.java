@@ -28,7 +28,9 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -47,6 +49,7 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
     private EditSatellite editSatellite;
     private final ResourceLocation texture;
     private final Component name;
+    protected int time;
     public SatelliteLauncherScreen(SatelliteLauncherMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, Component.empty(), TEXTURE, SLOT, 176, 184);
         this.texture = TEXTURE;
@@ -56,6 +59,7 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
     @Override
     protected void init() {
         super.init();
+        time = 0;
         editSatellite = new EditSatellite(this, leftPos + 9, topPos + 80);
         this.addRenderableWidget(editSatellite);
         this.addRenderableWidget(new TextButton(leftPos + 9, topPos + 53, 58, Component.literal("Configure"), b -> {
@@ -82,7 +86,11 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
         entity.startLaunching();
     }
 
-
+    @Override
+    protected void containerTick() {
+        time++;
+        super.containerTick();
+    }
 
     @Override
     public boolean canConfigure() {
@@ -165,7 +173,10 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
                     List<Satellite.InfoField<?>> toDraw = satellite.getInformation();
                     for(int i = 0; i < toDraw.size(); i++) {
                         Component firstPart = MutableComponent.create(toDraw.get(i).getName().getContents()).append(": ");
-                        Component secondPart = toDraw.get(i).getType();
+                        Component secondPart = scrollText(toDraw.get(i).getType(), screen.time + partialTicks, 0.75f, 10);
+
+
+
                         graphics.drawString(font, firstPart, 0, i * 12, 0xff8bf5f5, false);
                         graphics.drawString(font, secondPart, font.width(firstPart), i * 12, 0xff8bf5f5, false);
 //                        graphics.drawString(font, toDraw.get(i), 0, (i * 12), 0xff8bf5f5, false);
@@ -184,6 +195,17 @@ public class SatelliteLauncherScreen extends MachineScreen<SatelliteLauncherMenu
 
         public int getActiveIndex() {
             return activeIndex;
+        }
+
+        private static Component scrollText(Component original, double time, double speed, int shownLetters) {
+            Style style = original.getStyle();
+            String text = original.getString();
+
+            if(text.length() <= shownLetters) return original;
+            int length = (text.length() - shownLetters);
+            int letter = (int) (Math.round((Math.sin(time / 20.0 * speed) / 2.0 + 0.5) * length));
+
+            return Component.literal(text.substring(letter)).withStyle(style);
         }
     }
 
