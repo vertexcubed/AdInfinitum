@@ -1,0 +1,57 @@
+{
+    "targets": [
+        "depthMain",
+        "a",
+        "b"
+    ],
+    "passes": [
+        {
+            "name": "ad_infinitum:depth_edge",
+            "intarget": "minecraft:main",
+            "outtarget": "a",
+            "auxtargets": [
+                {
+                    "name": "MainDepthSampler",
+                    "id": "depthMain:depth"
+                }
+            ],
+            "uniforms": [
+                {
+                    "name": "Thickness",
+                    "values": [ 75.0 ]
+                }
+            ]
+        },
+        {
+            "name": "ad_infinitum:radial_blur",
+            "intarget": "a",
+            "outtarget": "b",
+            "uniforms": [
+                {
+                    "name": "Radius",
+                    "values": [ 10.0 ]
+                }
+            ]
+        },
+        {
+            "name": "ad_infinitum:impact_finish",
+            "intarget": "b",
+            "outtarget": "a",
+            "uniforms": [
+                {
+                    "name": "Speed",
+                    "values": [ 50.0 ]
+                },
+                {
+                    "name": "Scale",
+                    "values": [ 5000.0 ]
+                }
+            ]
+        },
+        {
+            "name": "blit",
+            "intarget": "a",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}

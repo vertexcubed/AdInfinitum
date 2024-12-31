@@ -2,6 +2,7 @@ package com.vertexcubed.ad_infinitum;
 
 import com.mojang.logging.LogUtils;
 import com.vertexcubed.ad_infinitum.client.shader.HeatDistortionPostProcessor;
+import com.vertexcubed.ad_infinitum.client.shader.ImpactFramePostProcessor;
 import com.vertexcubed.ad_infinitum.common.registry.*;
 import earth.terrarium.adastra.api.planets.PlanetApi;
 import earth.terrarium.adastra.common.network.messages.ServerboundConstructSpaceStationPacket;
@@ -12,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -72,6 +74,12 @@ public class AdInfinitum {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             PostProcessHandler.addInstance(HeatDistortionPostProcessor.INSTANCE);
+            ImpactFramePostProcessor.register();
+        }
+
+        @SubscribeEvent
+        public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+            KeyMappings.register(event);
         }
     }
 }

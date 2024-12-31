@@ -1,16 +1,15 @@
 package com.vertexcubed.ad_infinitum.common.event;
 
 
-import com.mojang.math.Axis;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import com.vertexcubed.ad_infinitum.client.renderer.SatelliteRenderDispatcher;
 import com.vertexcubed.ad_infinitum.client.shader.HeatDistortionPostProcessor;
+import com.vertexcubed.ad_infinitum.client.shader.ImpactFramePostProcessor;
+import com.vertexcubed.ad_infinitum.common.registry.KeyMappings;
 import com.vertexcubed.ad_infinitum.common.registry.TagRegistry;
 import com.vertexcubed.ad_infinitum.common.satellite.TestSatellite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent;
@@ -52,6 +51,13 @@ public class ClientEvents {
                 HeatDistortionPostProcessor.INSTANCE.setActive(false);
             }
         }
+
+
+        while(KeyMappings.SHADER_TEST.get().consumeClick() && Minecraft.getInstance().player != null) {
+            ImpactFramePostProcessor.INSTANCE.setPosition(Minecraft.getInstance().player.position().toVector3f());
+            ImpactFramePostProcessor.INSTANCE.setActive(!ImpactFramePostProcessor.INSTANCE.isActive());
+        }
+
     }
 
 }

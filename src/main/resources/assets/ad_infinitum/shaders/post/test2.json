@@ -1,0 +1,31 @@
+{
+    "targets": [
+        "depthMain",
+        "a",
+        "b"
+    ],
+    "passes": [
+        {
+            "name": "ad_infinitum:depth_edge",
+            "intarget": "minecraft:main",
+            "outtarget": "a",
+            "auxtargets": [
+                {
+                    "name": "MainDepthSampler",
+                    "id": "depthMain:depth"
+                }
+            ],
+            "uniforms": [
+                {
+                    "name": "Thickness",
+                    "values": [ 50.0 ]
+                }
+            ]
+        },
+        {
+            "name": "blit",
+            "intarget": "a",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}
