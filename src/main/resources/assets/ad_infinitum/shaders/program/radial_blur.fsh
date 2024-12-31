@@ -9,12 +9,8 @@ in vec2 oneTexel;
 uniform vec2 InSize;
 uniform mat4 ProjMat;
 
-//Lodestone Uniforms
-uniform vec3 cameraPos;
-
 //Custom uniforms
-uniform mat4 ViewMat;
-uniform vec3 Center;
+uniform vec2 Center;
 uniform float Radius;
 
 out vec4 fragColor;
@@ -22,10 +18,6 @@ out vec4 fragColor;
 
 void main() {
 
-    vec4 clipSpaceCenter = ProjMat * ViewMat * vec4(Center - cameraPos, 1.0);
-    clipSpaceCenter /= clipSpaceCenter.w;
-
-    vec2 screenCenter = vec2((clipSpaceCenter / 2.0 + 0.5).xy);
 
 
     vec4 blurred = vec4(0.0);
@@ -33,7 +25,7 @@ void main() {
     float totalAlpha = 0.0;
     float totalSamples = 0.0;
 
-    vec2 centerDir = normalize(texCoord - vec2(0.5, 0.5));
+    vec2 centerDir = normalize(texCoord - Center);
 
     for(float r = -Radius; r <= Radius; r += 1.0) {
         vec4 sampleValue = texture(DiffuseSampler, texCoord + oneTexel * r * centerDir);

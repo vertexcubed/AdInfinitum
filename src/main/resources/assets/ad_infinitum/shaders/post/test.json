@@ -23,9 +23,30 @@
             ]
         },
         {
-            "name": "ad_infinitum:radial_blur",
+            "name": "ad_infinitum:circle_expand",
             "intarget": "a",
             "outtarget": "b",
+            "auxtargets": [
+                {
+                    "name": "MainDepthSampler",
+                    "id": "depthMain:depth"
+                }
+            ],
+            "uniforms": [
+                {
+                    "name": "Thickness",
+                    "values": [ 3.0 ]
+                },
+                {
+                    "name": "Speed",
+                    "values": [ 40.0 ]
+                }
+            ]
+        },
+        {
+            "name": "ad_infinitum:radial_blur",
+            "intarget": "b",
+            "outtarget": "a",
             "uniforms": [
                 {
                     "name": "Radius",
@@ -35,8 +56,8 @@
         },
         {
             "name": "ad_infinitum:impact_finish",
-            "intarget": "b",
-            "outtarget": "a",
+            "intarget": "a",
+            "outtarget": "b",
             "uniforms": [
                 {
                     "name": "Speed",
@@ -50,7 +71,7 @@
         },
         {
             "name": "blit",
-            "intarget": "a",
+            "intarget": "b",
             "outtarget": "minecraft:main"
         }
     ]

@@ -12,13 +12,11 @@ uniform vec2 InSize;
 
 //Lodestone uniform
 uniform float time;
-uniform vec3 cameraPos;
 
 //Custom uniforms
 uniform float Scale;
 uniform float Speed;
-uniform mat4 ViewMat;
-uniform vec3 Center;
+uniform vec2 Center;
 
 
 in vec2 texCoord;
@@ -41,19 +39,15 @@ void main() {
     //state.lacunarity = 2.f;
     state.gain = .5f;
 
-    vec4 color = texture(DiffuseSampler, texCoord);
 
-    vec2 coords = polar(texCoord * 2.0 - 1.0);
+    vec4 originalColor = texture(DiffuseSampler, texCoord);
 
-    float angle = abs(coords.y) * Scale;
-
+    float angle = abs(polar(texCoord - Center).y) * Scale;
     float noiseAngle = fnlGetNoise2D(state, 50.0f + time * Speed, angle) / 2.f + 0.5f;
-
     noiseAngle = step(0.3, noiseAngle) * (1. - step(0.8, noiseAngle));
 
 
-    fragColor = color * (1.0 - noiseAngle);
-
+    fragColor = originalColor * (1.0 - noiseAngle);
     fragColor.a = 1.0;
 
 }
