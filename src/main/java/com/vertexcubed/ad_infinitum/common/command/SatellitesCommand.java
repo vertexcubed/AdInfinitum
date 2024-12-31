@@ -20,20 +20,23 @@ import static net.minecraft.commands.Commands.literal;
 public class SatellitesCommand {
 
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(literal(AdInfinitum.MODID)
-                .then(literal("satellites").requires(source -> source.hasPermission(2))
-                        .then(literal("get")
-                                .executes(ctx -> getSatellite(ctx.getSource(), null))
-                                .then(argument("uuid", UuidArgument.uuid())
-                                        .executes(ctx -> getSatellite(ctx.getSource(), UuidArgument.getUuid(ctx, "uuid")))
-                                )
-                        )
-                        .then(literal("clear")
-                                .executes(ctx -> clearSatellites(ctx.getSource()))
+    public static LiteralArgumentBuilder<CommandSourceStack> register() {
+        return
+                literal("satellites")
+                .requires(source -> source.hasPermission(2))
+                .then(
+                        literal("get")
+                        .executes(ctx -> getSatellite(ctx.getSource(), null))
+                        .then(
+                                argument("uuid", UuidArgument.uuid())
+                                .executes(ctx -> getSatellite(ctx.getSource(), UuidArgument.getUuid(ctx, "uuid")))
                         )
                 )
-        );
+                .then(
+                        literal("clear")
+                        .executes(ctx -> clearSatellites(ctx.getSource()))
+                )
+        ;
     }
 
 

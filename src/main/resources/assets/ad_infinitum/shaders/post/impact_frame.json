@@ -35,11 +35,11 @@
             "uniforms": [
                 {
                     "name": "Thickness",
-                    "values": [ 3.0 ]
+                    "values": [ 5.0 ]
                 },
                 {
                     "name": "Speed",
-                    "values": [ 40.0 ]
+                    "values": [ 200.0 ]
                 }
             ]
         },
@@ -70,8 +70,19 @@
             ]
         },
         {
-            "name": "blit",
+            "name": "ad_infinitum:blend",
             "intarget": "b",
+            "outtarget": "a",
+            "auxtargets": [
+                {
+                    "name": "OtherDiffuseSampler",
+                    "id": "minecraft:main"
+                }
+            ]
+        },
+        {
+            "name": "blit",
+            "intarget": "a",
             "outtarget": "minecraft:main"
         }
     ]

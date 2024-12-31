@@ -2,6 +2,7 @@ package com.vertexcubed.ad_infinitum.common.event;
 
 
 import com.vertexcubed.ad_infinitum.AdInfinitum;
+import com.vertexcubed.ad_infinitum.common.command.AdInfinitumCommands;
 import com.vertexcubed.ad_infinitum.common.command.SatellitesCommand;
 import com.vertexcubed.ad_infinitum.common.item.SatelliteItem;
 import com.vertexcubed.ad_infinitum.common.satellite.SatelliteManager;
@@ -53,7 +54,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void regsiterCommands(RegisterCommandsEvent event) {
-        SatellitesCommand.register(event.getDispatcher());
+        AdInfinitumCommands.register(event.getDispatcher());
     }
 
     @SubscribeEvent

@@ -1,6 +1,8 @@
 package com.vertexcubed.ad_infinitum;
 
 import com.mojang.logging.LogUtils;
+import com.vertexcubed.ad_infinitum.client.renderer.worldevent.OrbitalStrikeWorldEventRenderer;
+import com.vertexcubed.ad_infinitum.client.screenshake.ScreenshakeHandler;
 import com.vertexcubed.ad_infinitum.client.shader.HeatDistortionPostProcessor;
 import com.vertexcubed.ad_infinitum.client.shader.ImpactFramePostProcessor;
 import com.vertexcubed.ad_infinitum.common.registry.*;
@@ -20,6 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import team.lodestar.lodestone.registry.client.LodestoneWorldEventRendererRegistry;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
 
@@ -75,6 +78,9 @@ public class AdInfinitum {
         public static void onClientSetup(FMLClientSetupEvent event) {
             PostProcessHandler.addInstance(HeatDistortionPostProcessor.INSTANCE);
             ImpactFramePostProcessor.register();
+            LodestoneWorldEventRendererRegistry.registerRenderer(WorldEventRegistry.ORBITAL_STRIKE, new OrbitalStrikeWorldEventRenderer());
+            ScreenshakeHandler.init();
+
         }
 
         @SubscribeEvent

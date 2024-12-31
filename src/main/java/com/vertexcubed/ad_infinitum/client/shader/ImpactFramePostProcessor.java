@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.vertexcubed.ad_infinitum.AdInfinitum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -22,13 +23,16 @@ public class ImpactFramePostProcessor extends PostProcessor {
 
     public static final ImpactFramePostProcessor INSTANCE = new ImpactFramePostProcessor();
 
+
     public static void register() {
         PostProcessHandler.addInstance(ImpactFramePostProcessor.INSTANCE);
+        PostProcessHandler.addInstance(InvertPostProcessor.INSTANCE);
     }
 
     private Vector3f position;
     public ImpactFramePostProcessor() {
         position = new Vector3f(0, 0, 0);
+        this.setActive(false);
     }
 
     public void setPosition(Vector3f position) {
@@ -41,16 +45,39 @@ public class ImpactFramePostProcessor extends PostProcessor {
 
     @Override
     public ResourceLocation getPostChainLocation() {
-        return modLoc("test");
+        return modLoc("impact_frame");
     }
 
     @Override
     public void beforeProcess(PoseStack viewModelStack) {
+
+        if(this.time >= 0.1 && time <= 0.2) {
+            if(!InvertPostProcessor.INSTANCE.isActive()) {
+                InvertPostProcessor.INSTANCE.setActive(true);
+            }
+        }
+        else if(InvertPostProcessor.INSTANCE.isActive()) {
+            InvertPostProcessor.INSTANCE.setActive(false);
+        }
+
+        float endTime = 0.8f;
+
+        float blendAmount = Mth.clamp(Mth.inverseLerp((float)time, 0.4f, endTime), 0.0f, 1.0f);
+
+        if(this.time >= endTime) {
+            setActive(false);
+            InvertPostProcessor.INSTANCE.setActive(false);
+            return;
+        }
+
+
+
         Arrays.stream(effects).forEach(effect -> {
             Vector3f centerTexCoord = worldPosToTexCoord(position, viewModelStack);
 //            AdInfinitum.LOGGER.info("centerTexCoord: " + centerTexCoord);
             effect.safeGetUniform("Center").set(centerTexCoord.x, centerTexCoord.y);
             effect.safeGetUniform("WorldCenter").set(position);
+            effect.safeGetUniform("BlendAmount").set(blendAmount);
         });
     }
 
